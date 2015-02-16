@@ -1,0 +1,44 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package MoveController;
+
+import DataModel.Move;
+import java.util.ArrayList;
+
+/**
+ *
+ * @author Bastien
+ */
+public class PathGenerator {
+    
+    public ArrayList<Path> getPathList(Move move)
+    {
+        ArrayList<Path> list = new ArrayList<Path>();
+        
+        Path movePath = new Path();
+        
+        //Ranger la piece capturee en premier
+        if(move.get("type")=="capture")
+        {
+            
+        }
+        
+        //Deplacer la piece qui effectue le deplacement
+        if(move.get("piece").equals("cavalier"))
+        {
+            //movePath.push(move.get("pos1").toAbsolute());
+            //movePath.push(move.get("pos2").toAbsolute());
+        }
+        else{ // generation chemin special du cavalier
+            
+        }
+        
+        list.add(movePath);
+        
+        return list;
+    }
+}
+

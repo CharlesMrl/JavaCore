@@ -1,0 +1,41 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package DataModel;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+/**
+ *
+ * @author Bastien
+ */
+public class Game extends DataModel{
+    static String table_name="games";
+    
+    public Game(){
+        
+    }
+    
+    public Game(HashMap<String, String> input){
+        super(input);
+    }
+    
+    static public Game getById(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    public static String getTable() {
+        return "games";
+    }
+    
+    public boolean isOver()
+    {
+        if(!this.containsField("winner") || this.get("winner")==null) return false;
+        return true;
+    }
+    
+}

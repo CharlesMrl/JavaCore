@@ -1,0 +1,57 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package javacore;
+
+import DataModel.*;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Date;
+
+/**
+ *
+ * @author Bastien
+ */
+public class JavaCore {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        
+        //login
+        Connection con=ConnectionManager.getConnection();
+        //selection partie
+        try{
+            Game currentGame = new Game();
+            currentGame = Game.findById(1);
+
+            System.out.println(currentGame.getServerFEN());
+            //System.out.println();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        //mise en place des pieces
+        
+        //Si mon tour de jouer
+            //Attendre la detection d'un coup
+            //Verifier legalite
+            //Envoi des infos du coup
+            //Verifier si echec et mat
+                //Envoi info victoire
+                //Informer joueur de la victoire
+        //Si tour de l'adversaire
+            //Attendre un nouveau coup
+                //Effectuer deplacements du coup
+                //Si coup gagnant
+                    //Informer joueur de la defaite
+        //Tester coherence du plateau
+        
+    }
+    
+}
