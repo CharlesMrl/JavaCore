@@ -42,7 +42,7 @@ public class GameTest {
 
     public void testEchec()
     {
-        Javacore newGame = new Javacore();
+        JavaCore newGame = new JavaCore();
     }
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:

@@ -18,7 +18,6 @@ public class PathGenerator {
     {
         ArrayList<Position> list = new ArrayList();
         
-        
         //Ranger la piece capturee en premier
         if(move.get("type")=="capture")
         {

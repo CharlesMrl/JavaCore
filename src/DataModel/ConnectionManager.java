@@ -240,7 +240,7 @@ public class ConnectionManager {
         return find(type,critere);
     }
     
-    //renvoie l'objets ou l'attribut field=value
+    //renvoie l'objet DataModel de type "type" dont l' "id" est id
     public static DataModel findById(Class type, Object id) throws SQLException
     {
         ArrayList<DataModel> d = find(type,"id",id);

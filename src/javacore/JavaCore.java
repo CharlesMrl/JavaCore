@@ -24,12 +24,12 @@ import wechesspresso.*;
  */
 public class JavaCore {
 
-    /**
-     * @param args the command line arguments
-     */
-    static Game current;
-    static Player user;
+    public Connection con;
+    public Game current_game;
+    public Player user;
+    public final Scanner input = new Scanner(System.in);
     
+    //Affiche un echiquier en texte a partir d'une FEN
     static void printFEN(String fen){
         String[] alines = fen.split("/");
         ArrayList<String> lines = new ArrayList();
@@ -59,108 +59,103 @@ public class JavaCore {
         System.out.println(" |abcdefgh|");
     }
     
-    public static void main(String[] args) {
-
+    public JavaCore(int user_id, int game_id){
         //login
-        Connection con = ConnectionManager.getConnection();
+        this.con = ConnectionManager.getConnection();
 
-        String user_id, mon_coup, newFen = null;
-        Scanner input = new Scanner(System.in);
-
-        Player.find("name", "Pascard").get(0).print();
-        Player.find("name", "Mariller").get(0).print();
-
-        System.out.println("Choose user ID : ");
-        user_id = input.nextLine();
-
+        this.user=null;
+        this.current_game=null;
         try {
-            user = Player.findById(user_id);
-        } catch (SQLException ex) {
-            Logger.getLogger(JavaCore.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //selection partie
-        try {
-            current = Game.findById(1);
-            current.print();
+            user = Player.findById(String.valueOf(user_id));
+            //selection partie
+            current_game = Game.findById(game_id);
+            current_game.print();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        while (true) {
+    }
+    
+    
+    public void loop() throws Exception{
+        String mon_coup=null;
+        String newFen=null;
             //mise en place des pieces
 
             //Si mon tour de jouer
-            if (current.myTurn(user_id)) 
+            if (current_game.myTurn(user.get("id") )) 
             {
-                current.sync();
-                printFEN(current.get("fen"));
+                current_game.sync();
+                printFEN(current_game.get("fen"));
                 do {
                     //Attendre la detection d'un coup
                     System.out.println("Your turn, your move : ");
                     mon_coup = input.nextLine();
                     try {
                         //Verifier que le coup est valide
-                        newFen = WeChesspresso.getNewFen(current.get("fen"), mon_coup);
+                        newFen = WeChesspresso.getNewFen(current_game.get("fen"), mon_coup);
                         if (newFen.equals("no")) 
                         {
                             System.out.println("Invalid move !");
-                            WeChesspresso.printAllMoves(current.get("fen"));
+                            WeChesspresso.printAllMoves(current_game.get("fen"));
                         }
                                 
                         
                     } catch (IllegalMoveException ex) {
                         Logger.getLogger(JavaCore.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
                 } while (newFen.equals("no"));
                 printFEN(newFen);
                 //Envoi des infos du coup
                 HashMap movedata = new HashMap();
-                movedata.put("pid", current.get("id"));
+                movedata.put("pid", current_game.get("id"));
                 movedata.put("uid", user.get("id"));
                 movedata.put("fen", newFen);
                 movedata.put("pos1", mon_coup.substring(0, 2));
                 movedata.put("pos2", mon_coup.substring(2));
-                movedata.put("type", WeChesspresso.getMoveType(current.get("fen"),mon_coup)); // LOUIS : determiner type de coup
+                movedata.put("type", WeChesspresso.getMoveType(current_game.get("fen"),mon_coup)); // LOUIS : determiner type de coup
                 movedata.put("time", Move.getTimeStamp());
                 Move m = new Move(movedata);
                 m.print();
-                current.assignNewMove(m);
+                current_game.assignNewMove(m);
                 // LOUIS : Verifier si echec et mat
-                if (current.isCheckmate()) {
+                if (current_game.isCheckmate()) {
                     //Envoi info victoire
                     System.out.println("You won!");
-                    current.set("winner", user_id);
-                    
+                    current_game.set("winner", user.get("id"));
                 }
             } //Si tour de l'adversaire
             else{
                 //Attendre un nouveau coup
                 System.out.print("Waiting for the opponent move...");
-                current.sync();
-                while (!current.myTurn(user_id)) {
+                current_game.sync();
+                while (!current_game.myTurn(user.get("id"))) {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(JavaCore.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                current.sync();
+                current_game.sync();
                 //Effectuer deplacements du coup
-                Move m = Move.getLastFromGame(current);
+                Move m = Move.getLastFromGame(current_game);
                 System.out.print("Move received : ");
                 m.print();
+                
+                /* Code de déplacement des moteurs
+                 * pour effectuer le move recu
+                 * de l'adversaire.
+                */
+                
                 //Si echec
-                if(current.isCheck()){
+                if(current_game.isCheck()){
                     System.out.println("CHECK! ... *stress*");
                 }
                 //Si coup gagnant
-                if (current.isCheckmate()) {
+                if (current_game.isCheckmate()) {
                     //Informer joueur de la defaite
                     System.out.println("You lost!...loser");
                 }
             }
-        }
     }
 
 }
