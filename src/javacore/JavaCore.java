@@ -7,9 +7,6 @@ package javacore;
 
 import DataModel.*;
 import chesspresso.move.IllegalMoveException;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,31 +72,49 @@ public class JavaCore {
         }
     }
     
+    public void setCurrentGame(int game_id){
+        try {
+            current_game = Game.findById(game_id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void setUser(int user_id){
+        try {
+            user = Player.findById(user_id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     public void loop() throws Exception{
         String mon_coup=null;
         String newFen=null;
-            //mise en place des pieces
-
             //Si mon tour de jouer
             if (current_game.myTurn(user.get("id") )) 
             {
                 current_game.sync();
                 printFEN(current_game.get("fen"));
                 do {
-                    //Attendre la detection d'un coup
+                    // Attendre la detection d'un coup
                     System.out.println("Your turn, your move : ");
+                    //////////////////////////////////
+                    // nextLine() doit etre remplacé par la sortie de l'arduino
+                    /*
+                        arduino_output = reedArray.read();
+                        mon_coup = moveDecoder.decode(arduino_output);
+                    */
                     mon_coup = input.nextLine();
+                    //////////////////////////////////
+                    
                     try {
                         //Verifier que le coup est valide
                         newFen = WeChesspresso.getNewFen(current_game.get("fen"), mon_coup);
-                        if (newFen.equals("no")) 
-                        {
+                        if (newFen.equals("no")){
                             System.out.println("Invalid move !");
                             WeChesspresso.printAllMoves(current_game.get("fen"));
                         }
-                                
-                        
                     } catch (IllegalMoveException ex) {
                         Logger.getLogger(JavaCore.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -116,6 +131,7 @@ public class JavaCore {
                 movedata.put("time", Move.getTimeStamp());
                 Move m = new Move(movedata);
                 m.print();
+                //affecter le move a la partie en cours
                 current_game.assignNewMove(m);
                 // LOUIS : Verifier si echec et mat
                 if (current_game.isCheckmate()) {
@@ -144,6 +160,11 @@ public class JavaCore {
                 /* Code de déplacement des moteurs
                  * pour effectuer le move recu
                  * de l'adversaire.
+                 *
+                 * // Decomposition du DataModel.Move en MoveController.Path
+                 *
+                 * // 
+                 *
                 */
                 
                 //Si echec

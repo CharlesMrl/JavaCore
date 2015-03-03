@@ -18,8 +18,8 @@ public class Main {
     public static void main(String[] args) {
         
         // Infos
-        Player.find("name", "Pascard").get(0).print();
-        Player.find("name", "Mariller").get(0).print();
+        //Player.find("name", "Pascard").get(0).print();
+        //Player.find("name", "Mariller").get(0).print();
         
         //Setup
         Scanner input = new Scanner(System.in);

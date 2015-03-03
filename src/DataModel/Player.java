@@ -19,8 +19,8 @@ public class Player extends DataModel{
         super(input);
     }
 
-    public static Player findById(String id) throws SQLException {
-        Player p=(Player)ConnectionManager.findById(Player.class,id);
+    public static Player findById(Object id) throws SQLException {
+        Player p=(Player)ConnectionManager.findById(Player.class,id.toString());
         return p;
     }
     

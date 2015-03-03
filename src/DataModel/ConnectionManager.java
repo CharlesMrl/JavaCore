@@ -5,9 +5,6 @@
  */
 package DataModel;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,10 +20,10 @@ import java.util.logging.Logger;
  */
 public class ConnectionManager {
 
-    private static String url = "jdbc:mysql://localhost:3305/pascard";
-    private static String driverName = "com.mysql.jdbc.Driver";
-    private static String username = "pascard-rw";
-    private static String password = "oBcTvODy";
+    private final static String url = "jdbc:mysql://localhost:3305/pascard";
+    private final static String driverName = "com.mysql.jdbc.Driver";
+    private final static String username = "pascard-rw";
+    private final static String password = "oBcTvODy";
     private static Connection con;
     private static String usernameECE;
     private static String passwordECE;
@@ -41,7 +38,7 @@ public class ConnectionManager {
         table_map.put(Player.class, "users");
     }
     
-    private static void prepare_stmt() throws SQLException
+    static private void prepare_stmt() throws SQLException
     {
         pstmt_select_simple = con.prepareStatement("SELECT * FROM ? WHERE ?=?");
         
