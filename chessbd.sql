@@ -1,8 +1,9 @@
+use chessdb;
 
-drop table users;
+drop table moves;
 drop table games;
 drop table friendships;
-drop table moves;
+drop table users;
 
 create table users (
 	id int AUTO_INCREMENT,
@@ -16,30 +17,52 @@ create table users (
 create table games (
 	id int AUTO_INCREMENT,
 	fen varchar(100) DEFAULT 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-        uidb int,
+    uidb int,
 	uidw int,
 	winner int NULL,
-	PRIMARY KEY( id )
+	PRIMARY KEY( id ),
+	FOREIGN KEY (uidb) REFERENCES users(id),
+	FOREIGN KEY (uidw) REFERENCES users(id)
 );
-
+	
 create table friendships (
 	id int AUTO_INCREMENT,
 	uid1 int,
 	uid2 int,
-	PRIMARY KEY( id )
+	PRIMARY KEY( id ),
+	FOREIGN KEY (uid1) REFERENCES users(id),
+	FOREIGN KEY (uid2) REFERENCES users(id)
 );
 
 create table moves(
 	id int AUTO_INCREMENT,
-	pid int,
-	fen varchar(100) DEFAULT 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-	type varchar(10),
-        pos1 varchar(2),
+	gid int,
+	fen varchar(100) DEFAULT 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', type varchar(10),
+    pos1 varchar(2),
 	pos2 varchar(2),
-	uid int,
 	time datetime,
-	PRIMARY KEY( id )
+	PRIMARY KEY( id ),
+	FOREIGN KEY (gid) REFERENCES games(id)
 );
+
+create table user_stats(
+	id int AUTO_INCREMENT,
+	uid int,
+	games_nb int,
+	wins_nb int,
+	loss_nb int,
+	draw_nb int,
+	friends_nb int,
+	championships_nb int,
+	championships_win_nb int,
+	points int,
+	world rank int,
+	national rank int,
+	regional rank int,
+
+	PRIMARY KEY (id),
+	FOREIGN KEY (uid) REFERENCES users(id)
+)
 
 insert into users VALUES (NULL,'Pascard','Bastien','France','Nogent-Sur-Marne');
 insert into users VALUES (NULL,'Denefle','Lucas','France','Boulbi');
@@ -61,4 +84,4 @@ insert into friendships VALUES (NULL,4,5);
 insert into friendships VALUES (NULL,5,4);
 
 insert into games (uidb,uidw) VALUES (1,4);
-insert into moves (pid,uid,type,time) VALUES (1,1,'start','2014-11-20 12:00:00');
+insert into moves (gid,type,time) VALUES (1,'start','2014-11-20 12:00:00');
