@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package MoveController;
 
 /**
@@ -20,6 +15,7 @@ public class Position {
         this.y=b;
     }
     
+    @Override
     public String toString(){
         return new String(x+","+y);
     }

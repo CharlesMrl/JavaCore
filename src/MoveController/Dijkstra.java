@@ -1,14 +1,13 @@
 /*
-Cette classe se charge 
- */
+Cette classe se charge
+*/
 package MoveController;
 import java.util.PriorityQueue;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-class Vertex implements Comparable<Vertex>
-{
+class Vertex implements Comparable<Vertex>{
     public final double x;
     public final double y;
     public ArrayList<Edge> adjacencies;
@@ -23,20 +22,17 @@ class Vertex implements Comparable<Vertex>
     public String toString() { return x+"-"+y; }
     
     @Override
-    public int compareTo(Vertex other)
-    {
+    public int compareTo(Vertex other){
         return Double.compare(minDistance, other.minDistance);
     }
-
+    
 }
 
 
-class Edge
-{
+class Edge{
     public final Vertex target;
     public final double weight;
-    public Edge(Vertex argTarget, double argWeight, int i, int j)
-    { 
+    public Edge(Vertex argTarget, double argWeight, int i, int j){
         if(argTarget==null) {
             System.out.println("arg problem "+i+" - "+j);
         }
@@ -44,26 +40,23 @@ class Edge
         weight = argWeight; }
 }
 
-public class Dijkstra
-{
-    private static void computePaths(Vertex source)
-    {
+public class Dijkstra{
+    private static void computePaths(Vertex source){
         source.minDistance = 0.0;
         PriorityQueue<Vertex> vertexQueue = new PriorityQueue();
-    vertexQueue.add(source);
-    
-    while (!vertexQueue.isEmpty()) {
-        Vertex u = vertexQueue.poll();
+        vertexQueue.add(source);
+        
+        while (!vertexQueue.isEmpty()) {
+            Vertex u = vertexQueue.poll();
             // Visit each edge exiting u
-            for (Edge e : u.adjacencies)
-            {
+            for (Edge e : u.adjacencies){
                 Vertex v = e.target;
                 double weight = e.weight;
                 double distanceThroughU = u.minDistance + weight;
                 if (distanceThroughU < v.minDistance) {
                     System.out.println();
                     vertexQueue.remove(v);
-
+                    
                     v.minDistance = distanceThroughU ;
                     v.previous = u;
                     vertexQueue.add(v);
@@ -73,21 +66,19 @@ public class Dijkstra
         }
         
     }
-
-    private static List<Vertex> getShortestPathTo(Vertex target)
-    {
+    
+    private static List<Vertex> getShortestPathTo(Vertex target){
         List<Vertex> path = new ArrayList();
         for (Vertex vertex = target; vertex != null; vertex = vertex.previous)
             path.add(vertex);
-
+        
         Collections.reverse(path);
         return path;
     }
     
     
     
-    private static Vertex[][] makeVertexMap(int size, double shift)
-    {
+    private static Vertex[][] makeVertexMap(int size, double shift){
         Vertex[][] vertexArray = new Vertex[size][size];
         Vertex v;
         String key;
@@ -100,13 +91,13 @@ public class Dijkstra
         
         for(int i=0 ; i<size ; i++){
             for(int j=0 ; j<size ; j++){
-               vertexArray[i][j].adjacencies = new ArrayList();
-               
-               if(i+1<size) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i+1][j], 1, i+1, j));
-               if(i>0) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i-1][j], 1, i-1, j));
-               if(j+1<size) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j+1], 1, i, j+1));
-               if(j>0) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j-1], 1, i, j-1));
-               
+                vertexArray[i][j].adjacencies = new ArrayList();
+                
+                if(i+1<size) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i+1][j], 1, i+1, j));
+                if(i>0) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i-1][j], 1, i-1, j));
+                if(j+1<size) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j+1], 1, i, j+1));
+                if(j>0) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j-1], 1, i, j-1));
+                
             }
         }
         
@@ -138,8 +129,7 @@ public class Dijkstra
     }
     
     
-    private static List<Position> getShortestPath(int a, int b, List<Integer> occupied)
-    {
+    private static List<Position> getShortestPath(int a, int b, List<Integer> occupied){
         Vertex[][] center = makeVertexMap(12,0.5);
         Vertex v_start =center[a%12][a/12];
         Vertex v_end = center[b%12][b/12];
@@ -165,8 +155,7 @@ public class Dijkstra
         return r;
     }
     
-    public static void main(String[] args)
-    {
+    public static void main(String[] args){
         
         List<Integer> cases_prises = new ArrayList();
         int start_x = 2;
