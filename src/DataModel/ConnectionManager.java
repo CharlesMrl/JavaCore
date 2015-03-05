@@ -27,7 +27,7 @@ public class ConnectionManager {
     private static Connection con;
     private static String usernameECE;
     private static String passwordECE;
-    private static HashMap<Class, String> table_map;
+    private static HashMap<Class, String> table_map; //Mapping entre les classes de DataModel et les tables de la BDD
     private static PreparedStatement pstmt_select_simple;
     
     private static void init_table_map()
@@ -61,7 +61,7 @@ public class ConnectionManager {
         return table_map.get(type);
     }
     
-    public static Connection getConnection() {
+    public static Connection getConnection() throws SQLException, ClassNotFoundException{
         init_table_map();
         Scanner input = new Scanner(System.in);
         System.out.println("login ECE : ");
@@ -79,9 +79,11 @@ public class ConnectionManager {
             // log an exception. fro example:
             ex.printStackTrace();
             System.out.println("Failed to create the database connection.");
+            throw ex;
         } catch (ClassNotFoundException ex) {
             // log an exception. for example:
             System.out.println("Driver not found.");
+            throw ex;
         }
         System.out.println("MySQL connexion successful : " + url);
         return con;
@@ -243,6 +245,7 @@ public class ConnectionManager {
         ArrayList<DataModel> d = find(type,"id",id);
         if(!d.isEmpty())
         return (DataModel)d.get(0);
-        else throw new SQLException();
+        else throw new SQLException("No object of type "+type.getSimpleName()+"found for id "+id);
     }
+    
 }

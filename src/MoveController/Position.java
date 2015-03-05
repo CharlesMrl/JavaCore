@@ -5,15 +5,20 @@
  */
 package MoveController;
 
+import DataModel.Move;
+import static java.lang.Math.sqrt;
+import java.util.ArrayList;
+
 /**
  *
  * @author Bastien
  */
-public class Position {
+public class Position{
     
     public static final float SQUARE_SIDE_MM = 65;
     double x;
     double y;
+    
     
     public Position(double a, double b){
         this.x=a;
@@ -40,9 +45,14 @@ public class Position {
         return false;
     }
 
+    public double distanceTo(Position o) {
+        return sqrt((this.x-o.x)*(this.x-o.x)+(this.y-o.y)*(this.y-o.y));
+    }
+
     private static class NotCenterPositionException extends Exception {
 
         public NotCenterPositionException() {
         }
     }
+    
 }

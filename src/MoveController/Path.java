@@ -6,6 +6,7 @@
 package MoveController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -13,7 +14,15 @@ import java.util.List;
  */
 public class Path {
     List<Position> positions;
-    float lenght;
+    double lenght;
     
-    
+    public Path(List<Position> lpos){
+        positions = lpos;
+        
+        int size = positions.size();
+        lenght = 0;
+        for(int i=0; i<size;i++){
+            lenght = lenght + positions.get(i).distanceTo(positions.get(i+1));
+        }
+    }
 }

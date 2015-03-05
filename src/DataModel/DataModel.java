@@ -21,7 +21,7 @@ public abstract class DataModel {
     
     public DataModel(){}
     
-    public DataModel(HashMap<String, String> input){
+    protected DataModel(HashMap<String, String> input){
         data=input;
     }
     

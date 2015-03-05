@@ -14,23 +14,26 @@ import java.util.ArrayList;
  */
 public class PathGenerator {
     
-    public ArrayList<Position> getPathList(Move move)
+    public ArrayList<Path> getPathList(Move move, String fen)
     {
-        ArrayList<Position> list = new ArrayList();
+        ArrayList<Path> list = new ArrayList();
         
-        //Ranger la piece capturee en premier
+        //Si capture, ranger la piece capturee en premier
         if(move.get("type")=="capture")
         {
+            //1er Path : ranger la piece capturée avec Dijkstra
             
         }
         
-        //Deplacer la piece qui effectue le deplacement
+        //Deplacer la piece qui effectue le deplacement/capture
         if(!move.get("piece").equals("cavalier"))
         {
-            
+            //generation du Path
         }
         else{ // generation chemin special du cavalier
-            
+            //Appel a Dijkstra et generation du Path du cavalier
+            Path knight_path = Dijkstra.getShortestPath(null, null, fen);
+            list.add(knight_path);
         }
         
         

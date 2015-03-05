@@ -85,7 +85,7 @@ public class Dijkstra
     }
     
     
-    
+    // Cree un quadrillage de Vertex reliés entre eux
     private static Vertex[][] makeVertexMap(int size, double shift)
     {
         Vertex[][] vertexArray = new Vertex[size][size];
@@ -114,12 +114,15 @@ public class Dijkstra
         return vertexArray;
     }
     
-    
-    
+    // Relie 2 quadrillages de Vertex (1 quadrillage pour les arretes, 1 quadrillages pour les faces)
     private static void linkVertexMaps(Vertex[][] v1, Vertex[][] v2, int size1, List<Integer> occupied){
-        double sqrt2_2 = 0.7071;
+        
+        //Estimation de sqrt(2)/2, la distance entre une arete et le milieu d'une face
+        double sqrt2_2 = 0.70710678;
+        
         for(Integer i=0 ; i<size1 ; i++){
             for(Integer j=0 ; j<size1 ; j++){
+                // Ne pas relier au maillage les cases occupées
                 if(occupied.contains(i*size1+j)){
                     //System.out.println("Case "+i+"-"+j+"occupee");
                     continue;
@@ -137,6 +140,18 @@ public class Dijkstra
         }
     }
     
+    public static Path getShortestPath(Position a, Position b, String fen)
+    {
+        List<Position> lpos=null;
+        try{
+            lpos = getShortestPath(a.toInteger(), b.toInteger(), getOccupied(fen));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return new Path(lpos);
+    }
     
     private static List<Position> getShortestPath(int a, int b, List<Integer> occupied)
     {
@@ -151,12 +166,6 @@ public class Dijkstra
         return vertex_to_position(path);
     }
     
-    public ArrayList<Integer> getOccupied(String fen){
-        ArrayList<Integer> liste = new ArrayList();
-        
-        return liste;
-    }
-    
     private static List<Position> vertex_to_position(List<Vertex> l){
         List<Position> r = new ArrayList();
         for(Vertex v : l){
@@ -164,6 +173,14 @@ public class Dijkstra
         }
         return r;
     }
+    
+    public static ArrayList<Integer> getOccupied(String fen){
+        ArrayList<Integer> liste = new ArrayList();
+        
+        return liste;
+    }
+    
+    
     
     public static void main(String[] args)
     {
