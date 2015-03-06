@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class PathGenerator {
     
-    public ArrayList<Path> getPathList(Move move, String fen)
+    static public ArrayList<Path> getPathList(Move move, String fen)
     {
         ArrayList<Path> list = new ArrayList();
         
@@ -35,7 +35,6 @@ public class PathGenerator {
             Path knight_path = Dijkstra.getShortestPath(null, null, fen);
             list.add(knight_path);
         }
-        
         
         return list;
     }

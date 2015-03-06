@@ -21,8 +21,19 @@ public class Path {
         
         int size = positions.size();
         lenght = 0;
-        for(int i=0; i<size;i++){
+        for(int i=0; i<size-1;i++){
             lenght = lenght + positions.get(i).distanceTo(positions.get(i+1));
         }
+    }
+    
+    @Override
+    public String toString(){
+        String o = new String();
+        
+        for(Position pos : positions){
+            o = o + pos.toString() + " ";
+        }
+        
+        return o;
     }
 }

@@ -5,8 +5,13 @@
  */
 package MoveController;
 
+import DataModel.Game;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,18 +21,54 @@ import java.util.logging.Logger;
  */
 public class MotorController {
     
-    private static final String motor_controller_bin = "/usr/bin/motorstepper";
+    private static final String motor_controller_bin = "/Users/Bast/Documents/_CODE/motorstepper/dummy_move";
     
-    static public void run(ArrayList<Path> path_list){
+    static public void run(List<Path> path_list){
+        String cmd = new String();
+        for (Path path : path_list) {
+            cmd = "";
+            int size = path.positions.size();
+            for(int i=0; i<size-1;i++){
+                cmd += path.positions.get(i).toString();
+                cmd += " ";
+                if(i==0) cmd += "x x ";
+            }
+            cmd += "y y ";
+            System.out.println("Sending cmd : "+cmd);
+            run(cmd);
+        }
         
     }
     
-    static public void run(String cmd){
+    static private void run(String cmd){
         ProcessBuilder builder = new ProcessBuilder(motor_controller_bin, cmd);
+        
         try {
-            builder.start();
+            Process p = builder.start();
+            InputStream stdout = p.getInputStream();
+            InputStream stderr = p.getErrorStream();
+            BufferedReader reader = new BufferedReader( new InputStreamReader( stdout ) );
+            
+            for ( String line = null; ((line = reader.readLine()) != null); ) {
+                // TODO: Do something with the output, maybe.
+                System.out.println(line);
+            }
+            
         } catch (IOException ex) {
             Logger.getLogger(MotorController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static void main(String[] args) {
+        String fen = Game.START_FEN;
+        
+        List<Path> lpath = new ArrayList<>();
+        
+        
+        Path p = Dijkstra.getShortestPath(new Position(0.5,5.5), new Position(5.5,3.5), fen);
+        lpath.add(p);
+        p = Dijkstra.getShortestPath(new Position(2.5,6.5), new Position(0.5,3.5), fen);
+        lpath.add(p);
+        run(lpath);
     }
 }
