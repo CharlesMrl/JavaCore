@@ -94,7 +94,8 @@ public class JavaCore {
             printFEN(current_game.get("fen"));
             do {
                 // Attendre la detection d'un coup
-                if(current_game.get("uidw")==user.get("id"))
+                System.out.println(current_game.get("uidw")+" - "+user.get("id"));
+                if(current_game.get("uidw").equals(user.get("id")))
                 System.out.println("Your turn, you play WHITE : ");
                 else
                 System.out.println("Your turn, you play BLACK : ");
