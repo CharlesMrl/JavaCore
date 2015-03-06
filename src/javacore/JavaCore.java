@@ -6,6 +6,7 @@
 package javacore;
 
 import DataModel.*;
+import MoveController.*;
 import chesspresso.move.IllegalMoveException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -126,21 +127,13 @@ public class JavaCore {
                     mon_coup.substring(2),
                     WeChesspresso.getMoveType(current_game.get("fen"), mon_coup),
                     Move.getTimeStamp());
-            /*
-            HashMap movedata = new HashMap();
-            movedata.put("pid", current_game.get("id"));
-            movedata.put("uid", user.get("id"));
-            movedata.put("fen", newFen);
-            movedata.put("pos1", mon_coup.substring(0, 2));
-            movedata.put("pos2", mon_coup.substring(2));
-            movedata.put("type", WeChesspresso.getMoveType(current_game.get("fen"), mon_coup)); // LOUIS : determiner type de coup
-            movedata.put("time", Move.getTimeStamp());
-            Move m = new Move(movedata);
-            */
             m.print();
             //affecter le move a la partie en cours
             current_game.assignNewMove(m);
             // LOUIS : Verifier si echec et mat
+            if (current_game.isCheck()) {
+                System.out.println("CHECK!");
+            }
             if (current_game.isCheckmate()) {
                 //Envoi info victoire
                 System.out.println("You won!");
@@ -163,15 +156,14 @@ public class JavaCore {
             Move m = Move.getLastFromGame(current_game);
             System.out.print("Move received : ");
             m.print();
-
+            
             /* Code de déplacement des moteurs
              * pour effectuer le move recu
              * de l'adversaire.
              *
              * // Decomposition du DataModel.Move en MoveController.Path
-             *
-             * // 
-             *
+             ArrayList<Path> path_list = PathGenerator.getPathList(m, current_game.get("fen"));
+             MotorController.run(path_list);
              */
             //Si echec
             if (current_game.isCheck()) {
