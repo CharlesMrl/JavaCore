@@ -17,7 +17,7 @@ import wechesspresso.WeChesspresso;
  */
 public class Game extends DataModel{
     
-    static String START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    static public String START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     String fen=null;
     
     public Game(){
