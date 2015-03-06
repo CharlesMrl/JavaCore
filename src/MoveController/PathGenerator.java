@@ -19,9 +19,10 @@ public class PathGenerator {
         ArrayList<Path> list = new ArrayList();
         
         //Si capture, ranger la piece capturee en premier
-        if(move.get("type")=="capture")
+        if(move.get("type").equals("capture"))
         {
             //1er Path : ranger la piece capturée avec Dijkstra
+            Position depart = new Position(move.get("pos2"));
             
         }
         
@@ -29,6 +30,10 @@ public class PathGenerator {
         if(!move.get("piece").equals("cavalier"))
         {
             //generation du Path
+            Position depart = new Position(move.get("pos1"));
+            Position fin = new Position(move.get("pos2"));
+            Path path = new Path(depart,fin);
+            list.add(path);
         }
         else{ // generation chemin special du cavalier
             //Appel a Dijkstra et generation du Path du cavalier

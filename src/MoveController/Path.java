@@ -5,6 +5,7 @@
  */
 package MoveController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,13 @@ public class Path {
         for(int i=0; i<size-1;i++){
             lenght = lenght + positions.get(i).distanceTo(positions.get(i+1));
         }
+    }
+    
+    public Path(Position p1, Position p2){
+        positions = new ArrayList<Position>();
+        positions.add(p1);
+        positions.add(p2);
+        lenght = p1.distanceTo(p2);
     }
     
     @Override
