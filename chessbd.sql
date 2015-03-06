@@ -4,6 +4,7 @@ drop table moves;
 drop table games;
 drop table friendships;
 drop table users;
+drop table user_stats;
 
 create table users (
 	id int AUTO_INCREMENT,
@@ -17,7 +18,7 @@ create table users (
 create table games (
 	id int AUTO_INCREMENT,
 	fen varchar(100) DEFAULT 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-    uidb int,
+        uidb int,
 	uidw int,
 	winner int NULL,
 	PRIMARY KEY( id ),
@@ -37,12 +38,14 @@ create table friendships (
 create table moves(
 	id int AUTO_INCREMENT,
 	gid int,
+        uid int,
 	fen varchar(100) DEFAULT 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', type varchar(10),
-    pos1 varchar(2),
+        pos1 varchar(2),
 	pos2 varchar(2),
 	time datetime,
 	PRIMARY KEY( id ),
-	FOREIGN KEY (gid) REFERENCES games(id)
+	FOREIGN KEY (gid) REFERENCES games(id),
+        FOREIGN KEY (uid) REFERENCES users(id)
 );
 
 create table user_stats(
@@ -56,13 +59,13 @@ create table user_stats(
 	championships_nb int,
 	championships_win_nb int,
 	points int,
-	world rank int,
-	national rank int,
-	regional rank int,
+	world_rank int,
+	national_rank int,
+	regional_rank int,
 
 	PRIMARY KEY (id),
 	FOREIGN KEY (uid) REFERENCES users(id)
-)
+);
 
 insert into users VALUES (NULL,'Pascard','Bastien','France','Nogent-Sur-Marne');
 insert into users VALUES (NULL,'Denefle','Lucas','France','Boulbi');
@@ -84,4 +87,4 @@ insert into friendships VALUES (NULL,4,5);
 insert into friendships VALUES (NULL,5,4);
 
 insert into games (uidb,uidw) VALUES (1,4);
-insert into moves (gid,type,time) VALUES (1,'start','2014-11-20 12:00:00');
+insert into moves (gid,uid,type,time) VALUES (1,1,'start','2014-11-20 12:00:00');
