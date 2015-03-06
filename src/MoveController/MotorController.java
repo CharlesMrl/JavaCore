@@ -34,7 +34,7 @@ public class MotorController {
                 if(i==0) cmd += "x x ";
             }
             cmd += "y y ";
-            System.out.println("Sending cmd : "+cmd);
+            //System.out.println("Sending cmd : "+cmd);
             run(cmd);
         }
         
@@ -65,9 +65,9 @@ public class MotorController {
         List<Path> lpath = new ArrayList<>();
         
         
-        Path p = Dijkstra.getShortestPath(new Position(0.5,5.5), new Position(5.5,3.5), fen);
+        Path p = Dijkstra.getShortestPath(new Position("c6"), new Position("a1"), fen);
         lpath.add(p);
-        p = Dijkstra.getShortestPath(new Position(2.5,6.5), new Position(0.5,3.5), fen);
+        p = Dijkstra.getShortestPath(new Position("a2"), new Position("a4"), fen);
         lpath.add(p);
         run(lpath);
     }

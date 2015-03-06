@@ -25,7 +25,7 @@ public class Move extends DataModel
     
     static public Move make(String pid,String uid,String fen,String pos1,String pos2,String type,String time){
         HashMap movedata = new HashMap();
-                movedata.put("pid", pid);
+                movedata.put("gid", pid);
                 movedata.put("uid", uid);
                 movedata.put("fen", fen);
                 movedata.put("pos1", pos1);
@@ -46,7 +46,7 @@ public class Move extends DataModel
     {
         
         //recuperer (BDD) tous les moves de la partie
-        ArrayList<DataModel> liste_move = ConnectionManager.find(Move.class, "pid", g.get("id"));
+        ArrayList<DataModel> liste_move = ConnectionManager.find(Move.class, "gid", g.get("id"));
         
         //chercher le move avec la date la plus recente
         String latest_time = liste_move.get(0).get("time");
