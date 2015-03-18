@@ -94,7 +94,6 @@ public class JavaCore {
             printFEN(current_game.get("fen"));
             do {
                 // Attendre la detection d'un coup
-                System.out.println(current_game.get("uidw")+" - "+user.get("id"));
                 if(current_game.get("uidw").equals(user.get("id")))
                 System.out.println("Your turn, you play WHITE : ");
                 else
@@ -166,6 +165,8 @@ public class JavaCore {
              ArrayList<Path> path_list = PathGenerator.getPathList(m, current_game.get("fen"));
              MotorController.run(path_list);
              */
+            ArrayList<Path> path_list = PathGenerator.getPathList(m, current_game.get("fen"));
+             MotorController.run(path_list);
             //Si echec
             if (current_game.isCheck()) {
                 System.out.println("CHECK! ... *stress*");

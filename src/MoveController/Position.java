@@ -30,8 +30,8 @@ public class Position{
     }
     
     public Position(int pos){
-        this.x=pos/12;
-        this.y=pos%12;
+        this.x=pos/12+0.5;
+        this.y=pos%12+0.5;
     }
     
     public Position(String pos){
