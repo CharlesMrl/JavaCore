@@ -42,6 +42,14 @@ public class ArduinoCommunicator implements SerialPortEventListener {
         appName = getClass().getName();
     }
     
+    public void validate(){
+        send("VALID");
+    }
+    
+    public void reject(){
+        send("INVALID");
+    }
+    
     public void sleep(){
         send("SLEEP");
     }
