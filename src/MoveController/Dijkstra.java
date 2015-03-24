@@ -71,7 +71,7 @@ public class Dijkstra{
 
 	private static List<Vertex> getShortestPathTo(Vertex target){
 
-		List<Vertex> path = new ArrayList();
+		List<Vertex> path = new ArrayList<Vertex>();
 		for (Vertex vertex = target; vertex != null; vertex = vertex.previous)
 			path.add(vertex);
 
@@ -95,7 +95,7 @@ public class Dijkstra{
 
 		for(int i=0 ; i<size ; i++){
 			for(int j=0 ; j<size ; j++){
-				vertexArray[i][j].adjacencies = new ArrayList();
+				vertexArray[i][j].adjacencies = new ArrayList<Edge>();
 
 				if(i+1<size) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i+1][j], 1, i+1, j));
 				if(i>0) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i-1][j], 1, i-1, j));
@@ -158,19 +158,19 @@ public class Dijkstra{
 	}
 
 	private static List<Position> vertex_to_position(List<Vertex> l){
-		List<Position> r = new ArrayList();
+		List<Position> r = new ArrayList<Position>();
 		for(Vertex v : l){
 			r.add(new Position(v.x,v.y));
 		}
 		return r;
 	}
-	
+
 	// reçoit une string fen et retourne un tableau de char représentant l'échiquier simple
 	public static ArrayList<ArrayList<Character>> getTabFromFen(String fen){
 
 		ArrayList<ArrayList<Character>> board = new ArrayList<ArrayList<Character>>();
 		String[] alines = fen.split("/");
-		ArrayList<String> lines = new ArrayList();
+		ArrayList<String> lines = new ArrayList<String>();
 		int k = 0, v = 0;
 
 		for(int i=0;i<8;i++){
@@ -202,7 +202,7 @@ public class Dijkstra{
 		}
 		return board;
 	}
-	
+
 	// reçoit une fen et retourne un l'échiquier sous forme de tableau avec en plus les pièces capturées sur les côtés
 	public static ArrayList<ArrayList<Character>> getFullBoard(String fen){
 
@@ -255,16 +255,16 @@ public class Dijkstra{
 		}
 		return fullBoard;
 	}
-	
+
 	// reçoit une fen et retourne une liste des cases occupées sous la forme x*12+y
 	public static ArrayList<Integer> getOccupied(String fen){
 
 		ArrayList<ArrayList<Character>> fullBoard = getFullBoard(fen);
-		ArrayList<Integer> liste = new ArrayList();
+		ArrayList<Integer> liste = new ArrayList<Integer>();
 		for(int i = fullBoard.size() - 1; i >= 0; i--){
 			for(int j = 0; j < fullBoard.get(0).size(); j++){
 				if(!fullBoard.get(i).get(j).equals('.')){
-					//System.out.println(j+" "+(fullBoard.size()-i-1));
+					System.out.println(j+" "+(fullBoard.size()-i-1));
 					liste.add(j*12+(fullBoard.size()-i-1));
 				}
 			}
@@ -272,11 +272,24 @@ public class Dijkstra{
 		return liste;
 	}
 
+	// Retourne board1 - board2
+	public static ArrayList<ArrayList<Character>> substrctBoards(ArrayList<ArrayList<Character>> board1, ArrayList<ArrayList<Character>> board2){
+		
+		for(int i = 0; i < board1.size(); i++){
+			for(int j = 0; j < board1.get(0).size(); j ++){
+				if(board1.get(i).get(j).equals(board2.get(i).get(j))){
+					board1.get(i).set(j,'.');
+				}
+			}
+		}
+		return board1;
+	}
+
 	// affiche le tableau représentant l'échiquier
 	private static void printBoard(ArrayList<ArrayList<Character>> board){
 		for(int i = 0; i < board.size(); i++){
 			for(int j = 0; j < board.get(0).size(); j++){
-				System.out.print(board.get(i).get(j));
+				System.out.print(board.get(i).get(j)+" ");
 			}
 			System.out.println();
 		}
@@ -285,13 +298,23 @@ public class Dijkstra{
 
 
 	public static void main(String[] args){
-		
-		/*
-		 * TO DO RECHERCHE
-		 * algo pour déterminer quelle pièce va ou, array list objet contenant coordonnée depart, arrivée, longueur
-		 */
-		
-		List<Integer> cases_prises = new ArrayList();
+	
+		String feninit = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
+		String newfen = "R1b1k2n/ppp5/4K2p/8/3p4/8/Pq6/3Q1Bb1 w KQkq - 0 5";
+
+		System.out.println("Init board");
+		printBoard(getFullBoard(feninit));
+		System.out.println("\nTarget board");
+		printBoard(getFullBoard(newfen));
+		System.out.println("\nSub init - target");
+		printBoard(substrctBoards(getFullBoard(feninit), getFullBoard(newfen)));
+		System.out.println("\nSub target - init");
+		printBoard(substrctBoards(getFullBoard(newfen), getFullBoard(feninit)));
+
+
+		/* 
+		 
+		 	List<Integer> cases_prises = new ArrayList<Integer>();
 		int start_x = 2;
 		int start_y = 1;
 		int end_x = 4;
@@ -307,9 +330,10 @@ public class Dijkstra{
 		List<Position> path = getShortestPath(start, end, cases_prises);
 		System.out.println(path);
 		
-		
-		//System.out.println("Path: " + path.toString());
+		*/
 
+		
+		
 		/*
 		 * TESTS
 		String fen = "R1b1k2n/ppp5/4K2p/8/3p4/8/Pq6/3Q1Bb1 w KQkq - 0 5";
@@ -331,3 +355,88 @@ public class Dijkstra{
 		 */
 	}
 }
+
+
+
+/*
+ TO DO RECHERCHE
+ algo pour déterminer quelle pièce va ou, array list objet contenant coordonnée depart, arrivée, longueur
+ utiliser dijkstra une première fois.
+ généré ensuite les chemins
+ partir de la case d'arrivée ??
+ 
+ SO
+ On a 2 FEN / tableaux
+ on récupère 2 nouveaux tableaux en "soustrayant" un a un les deux tableaux
+ 		init - target -> tableaux des pièces qui doivent bouger
+ 		target - init -> tableaux des positions de destinations des pièces qui doivent bouger
+ code pour visualiser point précédent:
+String feninit = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
+String newfen = "R1b1k2n/ppp5/4K2p/8/3p4/8/Pq6/3Q1Bb1 w KQkq - 0 5";
+
+System.out.println("Init board");
+printBoard(getFullBoard(feninit));
+System.out.println("\nTarget board");
+printBoard(getFullBoard(newfen));
+System.out.println("\nSub init - target");
+printBoard(substrctBoards(getFullBoard(feninit), getFullBoard(newfen)));
+System.out.println("\nSub target - init");
+printBoard(substrctBoards(getFullBoard(newfen), getFullBoard(feninit)));
+
+init	->	rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+target	->	R1b1k2n/ppp5/4K2p/8/3p4/8/Pq6/3Q1Bb1
+
+	Init board
+. . r n b q k b n r . . 
+. . p p p p p p p p . . 
+. . . . . . . . . . . . 
+. . . . . . . . . . . . 
+. . . . . . . . . . . . 
+. . . . . . . . . . . . 
+. . P P P P P P P P . . 
+. . R N B Q K B N R . . 
+
+
+	Target board
+r . R . b . k . . n P R 
+. . p p p . . . . . P N 
+. . . . . . K . . p P B 
+. . . . . . . . . . P . 
+. . . . . p . . . . P . 
+. p . . . . . . . . P . 
+n p P q . . . . . . P N 
+r p . . . Q . B b . . . 
+
+
+ Pieces that need to move
+. . r n . q . b n r . . 
+. . . . . p p p p p . . 
+. . . . . . . . . . . . 
+. . . . . . . . . . . . 
+. . . . . . . . . . . . 
+. . . . . . . . . . . . 
+. . . P P P P P P P . . 
+. . R N B . K . N R . . 
+
+
+Destination of previous pieces
+r . R . . . . . . n P R 
+. . . . . . . . . . P N 
+. . . . . . K . . p P B 
+. . . . . . . . . . P . 
+. . . . . p . . . . P . 
+. p . . . . . . . . P . 
+n p . q . . . . . . P N 
+r p . . . . . . b . . . 
+		
+
+ 
+ Donc:	dijkstra de toutes les cases du tableau de postion avec pour source les cases dest, et pour dest la ou les pièces correspondante,
+ 		sachant qu'on gardera le plus court.
+ On aura donc le chemin que chaque pièce doit effectuer
+ ensuite petit algo pour déterminer dans quel ordre on effectue ces chemins.
+ 
+ 
+*/
+
+
