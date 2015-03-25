@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,7 +27,7 @@ public class ArduinoCommunicator implements SerialPortEventListener {
     SerialPort serialPort = null;
     boolean listening = false;
     boolean available = false;
-    String bufferedInput=null;
+    public String bufferedInput="";
     
     private static final String PORT_NAMES[] = { 
         "/dev/tty.usbmodem1411", // Mac OS X
@@ -55,9 +57,15 @@ public class ArduinoCommunicator implements SerialPortEventListener {
     }
     
     public String read(){
-        while(!available);
+        //System.out.println("Reading ...");
+        while(bufferedInput.equals("")) try {
+            Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ArduinoCommunicator.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
         String tmp = bufferedInput;
-        bufferedInput=null;
+        bufferedInput="";
         listening=false;
         available=false;
         return tmp;
@@ -70,6 +78,10 @@ public class ArduinoCommunicator implements SerialPortEventListener {
     public void listen(){
         listening=true;
         send("listen\n");
+    }
+    
+    public void setBuffer(String b){
+        this.bufferedInput = b;
     }
     
     public boolean initialize() {
@@ -127,7 +139,7 @@ public class ArduinoCommunicator implements SerialPortEventListener {
     
     private void send(String data) {
         try {
-            System.out.println("Sent Arduino: '" + data +"'");
+            System.out.print("Sent Arduino: " + data);
             
             // open the streams and send the "y" character
             output = serialPort.getOutputStream();
@@ -153,8 +165,8 @@ public class ArduinoCommunicator implements SerialPortEventListener {
     // Handle serial port event
     //
     @Override
-    public synchronized void serialEvent(SerialPortEvent oEvent) {
-        System.out.println("Event received: " + oEvent.toString());
+    public void serialEvent(SerialPortEvent oEvent) {
+        //System.out.println("Event received: " + oEvent.toString());
         
         try {
             switch (oEvent.getEventType() ) {
@@ -163,10 +175,8 @@ public class ArduinoCommunicator implements SerialPortEventListener {
                         input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
                     }
                     
-                    bufferedInput = input.readLine();
-                    available=true;
-                    System.out.println("Arduino sent: '"+bufferedInput+"'");
-                    
+                    setBuffer(input.readLine());
+                    //System.out.println("Arduino sent: '"+bufferedInput+"'");
                     
                     break;
                 default:
@@ -181,13 +191,14 @@ public class ArduinoCommunicator implements SerialPortEventListener {
     public static void main(String[] args) {
         ArduinoCommunicator test = new ArduinoCommunicator();
         if ( test.initialize() ) {
-            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
+            while(true){
+                try { Thread.sleep(1000); } catch (InterruptedException ie) {}
             test.listen();
             String out = test.read();
             System.out.println("Received: "+out);
             test.validate();
             try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-            test.close();
+            }
         }
 
         // Wait 5 seconds then shutdown

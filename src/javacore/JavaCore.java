@@ -5,7 +5,7 @@
  */
 package javacore;
 
-import ArduinoCommunicator.MoveDecoder;
+import ArduinoCommunicator.*;
 import DataModel.*;
 import MoveController.*;
 import chesspresso.move.IllegalMoveException;
@@ -22,7 +22,8 @@ import wechesspresso.*;
  * @author Bastien
  */
 public class JavaCore {
-
+    
+    public ArduinoCommunicator arduino;
     public Connection con;
     public Game current_game;
     public Player user;
@@ -106,15 +107,9 @@ public class JavaCore {
                 arduino_output = reedArray.read();
                 mon_coup = moveDecoder.decode(arduino_output);
                 
-=======
-                /*
-                arduino_output = reedArray.read();
-                mon_coup = moveDecoder.decode(arduino_output);
-                // creer classe move decoder pour decoder le code
->>>>>>> 46aea36ff50748cd98ea1c043238d0c39238c4e7
                  */
                  arduino_output = input.nextLine();
-                mon_coup = MoveDecoder.decode(arduino_output);
+                 mon_coup = MoveDecoder.decode(arduino_output);
 
                 //////////////////////////////////
 

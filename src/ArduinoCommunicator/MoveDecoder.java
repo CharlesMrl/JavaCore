@@ -22,11 +22,13 @@ public class MoveDecoder {
         String[] mySplit = arduinoCode.split(" ");
         String coup;
         
+        //Deplacement normal
         if ((mySplit.length == 2)&&((mySplit[0].charAt(0) == 'u')&&(mySplit[1].charAt(0) == 'd')))
         {
             coup = mySplit[0].substring(1, 3) + mySplit[1].substring(1, 3);
         }
         
+        //Capture
         else if ((mySplit.length == 3)&&((mySplit[0].charAt(0) == 'u')&&(mySplit[1].charAt(0) == 'u')&&(mySplit[2].charAt(0) == 'd')))
         {
             coup = mySplit[0].substring(1, 3) + mySplit[2].substring(1, 3);
