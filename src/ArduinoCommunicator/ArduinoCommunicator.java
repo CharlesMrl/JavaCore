@@ -162,9 +162,10 @@ public class ArduinoCommunicator implements SerialPortEventListener {
                     if ( input == null ) {
                         input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
                     }
-                    bufferedInput = input.readLine();
-                    System.out.println("Arduino sent: '"+bufferedInput+"'");
                     
+                    bufferedInput = input.readLine();
+                    available=true;
+                    System.out.println("Arduino sent: '"+bufferedInput+"'");
                     
                     
                     break;
@@ -183,7 +184,7 @@ public class ArduinoCommunicator implements SerialPortEventListener {
             try { Thread.sleep(2000); } catch (InterruptedException ie) {}
             test.listen();
             String out = test.read();
-            System.out.println(out);
+            System.out.println("Received: "+out);
             test.validate();
             try { Thread.sleep(2000); } catch (InterruptedException ie) {}
             test.close();

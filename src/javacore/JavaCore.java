@@ -5,6 +5,7 @@
  */
 package javacore;
 
+import ArduinoCommunicator.MoveDecoder;
 import DataModel.*;
 import MoveController.*;
 import chesspresso.move.IllegalMoveException;
@@ -26,6 +27,7 @@ public class JavaCore {
     public Game current_game;
     public Player user;
     public final Scanner input = new Scanner(System.in);
+    String arduino_output;
 
     //Affiche un echiquier en texte a partir d'une FEN
     static void printFEN(String fen) {
@@ -98,15 +100,23 @@ public class JavaCore {
                 System.out.println("Your turn, you play WHITE : ");
                 else
                 System.out.println("Your turn, you play BLACK : ");
-                    //////////////////////////////////
+                //////////////////////////////////
                 // nextLine() doit etre remplacé par la sortie de l'arduino
                     /*
                 arduino_output = reedArray.read();
                 mon_coup = moveDecoder.decode(arduino_output);
                 
+=======
+                /*
+                arduino_output = reedArray.read();
+                mon_coup = moveDecoder.decode(arduino_output);
+                // creer classe move decoder pour decoder le code
+>>>>>>> 46aea36ff50748cd98ea1c043238d0c39238c4e7
                  */
-                mon_coup = input.nextLine();
-                    //////////////////////////////////
+                 arduino_output = input.nextLine();
+                mon_coup = MoveDecoder.decode(arduino_output);
+
+                //////////////////////////////////
 
                 try {
                     //Verifier que le coup est valide
