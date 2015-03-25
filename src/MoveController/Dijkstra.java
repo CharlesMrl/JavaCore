@@ -97,10 +97,45 @@ public class Dijkstra{
 			for(int j=0 ; j<size ; j++){
 				vertexArray[i][j].adjacencies = new ArrayList<Edge>();
 
-				if(i+1<size) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i+1][j], 1, i+1, j));
-				if(i>0) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i-1][j], 1, i-1, j));
-				if(j+1<size) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j+1], 1, i, j+1));
-				if(j>0) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j-1], 1, i, j-1));
+				if(i+1<size)
+					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i+1][j], 1, i+1, j));
+				if(i>0)
+					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i-1][j], 1, i-1, j));
+				if(j+1<size)
+					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j+1], 1, i, j+1));
+				if(j>0)
+					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j-1], 1, i, j-1));
+			}
+		}
+		return vertexArray;
+	}
+
+
+	// Cree un quadrillage de Vertex reliés entre eux
+	private static Vertex[][] makeVertexMap(int size, double shift, List<Integer> occupied){
+
+		Vertex[][] vertexArray = new Vertex[size][size];
+		Vertex v;
+		String key;
+
+		for(int i=0 ; i<size ; i++){
+			for(int j=0 ; j<size ; j++){
+				vertexArray[i][j]=new Vertex(i+shift,j+shift);
+			}
+		}
+
+		for(int i=0 ; i<size ; i++){
+			for(int j=0 ; j<size ; j++){
+				vertexArray[i][j].adjacencies = new ArrayList<Edge>();
+
+				if(i+1<size && !occupied.contains((i+1)*size+j))
+					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i+1][j], 1, i+1, j));
+				if(i>0 && !occupied.contains((i-1)*size+j))
+					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i-1][j], 1, i-1, j));
+				if(j+1<size && !occupied.contains(i*size+j+1))
+					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j+1], 1, i, j+1));
+				if(j>0 && !occupied.contains(i*size+j-1))
+					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j-1], 1, i, j-1));
 			}
 		}
 		return vertexArray;
@@ -146,7 +181,7 @@ public class Dijkstra{
 
 	private static List<Position> getShortestPath(int a, int b, List<Integer> occupied){
 
-		Vertex[][] center = makeVertexMap(12,0.5);
+		Vertex[][] center = makeVertexMap(12,0.5,occupied);
 		Vertex v_start =center[a%12][a/12];
 		Vertex v_end = center[b%12][b/12];
 		Vertex[][] corner = makeVertexMap(13,0);
@@ -256,35 +291,6 @@ public class Dijkstra{
 		return fullBoard;
 	}
 
-	// reçoit une fen et retourne une liste des cases occupées sous la forme x*12+y
-	public static ArrayList<Integer> getOccupied(String fen){
-
-		ArrayList<ArrayList<Character>> fullBoard = getFullBoard(fen);
-		ArrayList<Integer> liste = new ArrayList<Integer>();
-		for(int i = fullBoard.size() - 1; i >= 0; i--){
-			for(int j = 0; j < fullBoard.get(0).size(); j++){
-				if(!fullBoard.get(i).get(j).equals('.')){
-					System.out.println(j+" "+(fullBoard.size()-i-1));
-					liste.add(j*12+(fullBoard.size()-i-1));
-				}
-			}
-		}
-		return liste;
-	}
-
-	// Retourne board1 - board2
-	public static ArrayList<ArrayList<Character>> substrctBoards(ArrayList<ArrayList<Character>> board1, ArrayList<ArrayList<Character>> board2){
-		
-		for(int i = 0; i < board1.size(); i++){
-			for(int j = 0; j < board1.get(0).size(); j ++){
-				if(board1.get(i).get(j).equals(board2.get(i).get(j))){
-					board1.get(i).set(j,'.');
-				}
-			}
-		}
-		return board1;
-	}
-
 	// affiche le tableau représentant l'échiquier
 	private static void printBoard(ArrayList<ArrayList<Character>> board){
 		for(int i = 0; i < board.size(); i++){
@@ -295,45 +301,153 @@ public class Dijkstra{
 		}
 	}
 
+	// reçoit une fen et retourne une liste des cases occupées sous la forme x*12+y
+	public static ArrayList<Integer> getOccupied(String fen){
+
+		ArrayList<ArrayList<Character>> fullBoard = getFullBoard(fen);
+		ArrayList<Integer> liste = new ArrayList<Integer>();
+		for(int i = fullBoard.size() - 1; i >= 0; i--){
+			for(int j = 0; j < fullBoard.get(0).size(); j++){
+				if(!fullBoard.get(i).get(j).equals('.')){
+					//System.out.println(j+" "+(fullBoard.size()-i-1));
+					liste.add(j*12+(fullBoard.size()-i-1));
+				}
+			}
+		}
+		return liste;
+	}
+
+	public static ArrayList<Integer> getOccupied(ArrayList<ArrayList<Character>> fullBoard){
+
+		ArrayList<Integer> liste = new ArrayList<Integer>();
+		for(int i = fullBoard.size() - 1; i >= 0; i--){
+			for(int j = 0; j < fullBoard.get(0).size(); j++){
+				if(!fullBoard.get(i).get(j).equals('.')){
+					//liste.add(j*12+(fullBoard.size()-i-1));
+					liste.add(i*12+j);
+				}
+			}
+		}
+		return liste;
+	}
+
+
+
+	// Retourne board1 - board2
+	public static ArrayList<ArrayList<Character>> substrctBoards(ArrayList<ArrayList<Character>> board1, ArrayList<ArrayList<Character>> board2){
+
+		for(int i = 0; i < board1.size(); i++){
+			for(int j = 0; j < board1.get(0).size(); j ++){
+				if(board1.get(i).get(j).equals(board2.get(i).get(j))){
+					board1.get(i).set(j,'.');
+				}
+			}
+		}
+		return board1;
+	}
+
+	public static ArrayList<Integer> getPossibleFrom(ArrayList<ArrayList<Character>> board, Character piece){
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		for(int i = 0; i < board.size(); i++){
+			for(int j = 0; j < board.get(0).size(); j++){
+				if(board.get(i).get(j).equals(piece)){
+					list.add(i*12+j);
+				}
+			}
+		}
+		return list;
+	}
+
+	public static List<Position> correctPath(List<Position> path){
+		List<Position> pos = new ArrayList<Position>();
+		for(int i =0; i < path.size(); i++){
+			pos.add(new Position(8 - path.get(i).x, path.get(i).y));
+		}
+		return pos;
+	}
+
+
+	public static ArrayList<Path> getAllPaths(String sourceFen, String targetFen){
+
+		ArrayList<Path> paths = new ArrayList<Path>();
+		ArrayList<Path> tmpaths = new ArrayList<Path>();
+		ArrayList<ArrayList<Character>> sourceBoard = getFullBoard(sourceFen);
+		ArrayList<ArrayList<Character>> targetBoard = getFullBoard(targetFen);
+		ArrayList<ArrayList<Character>> needToMove = substrctBoards(getFullBoard(sourceFen), getFullBoard(targetFen));
+		ArrayList<ArrayList<Character>> moveTo = substrctBoards(getFullBoard(targetFen), getFullBoard(sourceFen));
+		ArrayList<ArrayList<Character>> varBoard = sourceBoard;
+
+		printBoard(sourceBoard);
+		System.out.println("");
+		printBoard(targetBoard);
+		System.out.println("");
+		printBoard(needToMove);
+		System.out.println("");
+		printBoard(moveTo);
+		System.out.println("");
+		
+		for(int i = 0; i < moveTo.size(); i++){
+			for(int j = 0; j < moveTo.get(0).size(); j++){
+				if(!moveTo.get(i).get(j).equals('.')){
+					ArrayList<Integer> possibleFrom = getPossibleFrom(needToMove, moveTo.get(i).get(j));
+					for(Integer a : possibleFrom){
+						tmpaths.add(new Path(getShortestPath(a,i*12+j, getOccupied(varBoard))));
+					}
+					Path tmpath = new Path(new ArrayList<Position>());
+					tmpath.length=999999999;
+					for(Path a : tmpaths){
+						if(a.length < tmpath.length){
+							tmpath = a;
+						} 
+					}
+					paths.add(tmpath);
+					varBoard.get(i).set(j, moveTo.get(i).get(j));
+					varBoard.get((int)(tmpath.getPositionati(0).getY()-0.5)).set((int)(tmpath.getPositionati(0).getX()-0.5),'.');
+				}
+			}
+		}
+		printBoard(varBoard);
+		return paths;
+	}
+
+
+
 
 
 	public static void main(String[] args){
-	
-		String feninit = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
-		String newfen = "R1b1k2n/ppp5/4K2p/8/3p4/8/Pq6/3Q1Bb1 w KQkq - 0 5";
+		
+		// TO DO
+		// tjr petit pb avec dijlstra
+		// reste plus qu'a faire des tests normalement c'est ok
 
-		System.out.println("Init board");
-		printBoard(getFullBoard(feninit));
-		System.out.println("\nTarget board");
-		printBoard(getFullBoard(newfen));
-		System.out.println("\nSub init - target");
-		printBoard(substrctBoards(getFullBoard(feninit), getFullBoard(newfen)));
-		System.out.println("\nSub target - init");
-		printBoard(substrctBoards(getFullBoard(newfen), getFullBoard(feninit)));
+		String feninit = "rnbqkbnr/pppp2pp/8/4pp2/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
+		String newfen = "rnbqkbnr/pppp2pp/8/3pp3/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
 
 
-		/* 
-		 
-		 	List<Integer> cases_prises = new ArrayList<Integer>();
-		int start_x = 2;
-		int start_y = 1;
-		int end_x = 4;
-		int end_y = 1;
+		ArrayList<Path> paths = getAllPaths(feninit, newfen);
+		System.out.println(paths);
+
+
+		/*
+		// Simple dijkstra test
+		List<Integer> cases_prises = new ArrayList<Integer>();
+		int start_x = 6;
+		int start_y = 3;
+		int end_x = 8;
+		int end_y = 3;
 		int start = start_x*12+start_y;
 		int end = end_x*12+end_y;
 
-		String fen = "R1b1k2n/ppp5/4K2p/8/3p4/8/Pq6/3Q1Bb1 w KQkq - 0 5";
+		String fen = "rnbqkbnr/pppp2pp/8/4pp2/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
 		ArrayList<ArrayList<Character>> teb = getFullBoard(fen);
-		for(ArrayList<Character> a : teb)
-			System.out.println(a);
+		printBoard(teb);
 		cases_prises = getOccupied(fen);
 		List<Position> path = getShortestPath(start, end, cases_prises);
-		System.out.println(path);
-		
-		*/
+		path = correctPath(path);
+		System.out.println("\n"+path.toString());
+		 */
 
-		
-		
+
 		/*
 		 * TESTS
 		String fen = "R1b1k2n/ppp5/4K2p/8/3p4/8/Pq6/3Q1Bb1 w KQkq - 0 5";
@@ -355,88 +469,5 @@ public class Dijkstra{
 		 */
 	}
 }
-
-
-
-/*
- TO DO RECHERCHE
- algo pour déterminer quelle pièce va ou, array list objet contenant coordonnée depart, arrivée, longueur
- utiliser dijkstra une première fois.
- généré ensuite les chemins
- partir de la case d'arrivée ??
- 
- SO
- On a 2 FEN / tableaux
- on récupère 2 nouveaux tableaux en "soustrayant" un a un les deux tableaux
- 		init - target -> tableaux des pièces qui doivent bouger
- 		target - init -> tableaux des positions de destinations des pièces qui doivent bouger
- code pour visualiser point précédent:
-String feninit = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
-String newfen = "R1b1k2n/ppp5/4K2p/8/3p4/8/Pq6/3Q1Bb1 w KQkq - 0 5";
-
-System.out.println("Init board");
-printBoard(getFullBoard(feninit));
-System.out.println("\nTarget board");
-printBoard(getFullBoard(newfen));
-System.out.println("\nSub init - target");
-printBoard(substrctBoards(getFullBoard(feninit), getFullBoard(newfen)));
-System.out.println("\nSub target - init");
-printBoard(substrctBoards(getFullBoard(newfen), getFullBoard(feninit)));
-
-init	->	rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
-target	->	R1b1k2n/ppp5/4K2p/8/3p4/8/Pq6/3Q1Bb1
-
-	Init board
-. . r n b q k b n r . . 
-. . p p p p p p p p . . 
-. . . . . . . . . . . . 
-. . . . . . . . . . . . 
-. . . . . . . . . . . . 
-. . . . . . . . . . . . 
-. . P P P P P P P P . . 
-. . R N B Q K B N R . . 
-
-
-	Target board
-r . R . b . k . . n P R 
-. . p p p . . . . . P N 
-. . . . . . K . . p P B 
-. . . . . . . . . . P . 
-. . . . . p . . . . P . 
-. p . . . . . . . . P . 
-n p P q . . . . . . P N 
-r p . . . Q . B b . . . 
-
-
- Pieces that need to move
-. . r n . q . b n r . . 
-. . . . . p p p p p . . 
-. . . . . . . . . . . . 
-. . . . . . . . . . . . 
-. . . . . . . . . . . . 
-. . . . . . . . . . . . 
-. . . P P P P P P P . . 
-. . R N B . K . N R . . 
-
-
-Destination of previous pieces
-r . R . . . . . . n P R 
-. . . . . . . . . . P N 
-. . . . . . K . . p P B 
-. . . . . . . . . . P . 
-. . . . . p . . . . P . 
-. p . . . . . . . . P . 
-n p . q . . . . . . P N 
-r p . . . . . . b . . . 
-		
-
- 
- Donc:	dijkstra de toutes les cases du tableau de postion avec pour source les cases dest, et pour dest la ou les pièces correspondante,
- 		sachant qu'on gardera le plus court.
- On aura donc le chemin que chaque pièce doit effectuer
- ensuite petit algo pour déterminer dans quel ordre on effectue ces chemins.
- 
- 
-*/
 
 
