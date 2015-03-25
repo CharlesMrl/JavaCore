@@ -21,7 +21,6 @@ public class MoveDecoder {
     {
         String[] mySplit = arduinoCode.split(" ");
         String coup;
-        System.out.println("mysplit 0 : "+ mySplit[0] + "mysplit 1 : "+ mySplit[1]);
         
         if ((mySplit.length == 2)&&((mySplit[0].charAt(0) == 'u')&&(mySplit[1].charAt(0) == 'd')))
         {
@@ -36,7 +35,7 @@ public class MoveDecoder {
         else  throw new  UnrecognizedMove("Coup impossible");
 
             
-        System.out.println("Move : "+ coup);
+        System.out.println("Move translated: "+ coup);
         return coup;
     }
     
@@ -45,7 +44,6 @@ public class MoveDecoder {
         public UnrecognizedMove(String message)
         {
             super(message);
-            return;
         }
     }
 }
