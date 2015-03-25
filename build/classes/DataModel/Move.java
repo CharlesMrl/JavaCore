@@ -23,6 +23,18 @@ public class Move extends DataModel
         super(input);
     }
     
+    static public Move make(String pid,String uid,String fen,String pos1,String pos2,String type,String time){
+        HashMap movedata = new HashMap();
+                movedata.put("gid", pid);
+                movedata.put("uid", uid);
+                movedata.put("fen", fen);
+                movedata.put("pos1", pos1);
+                movedata.put("pos2", pos2);
+                movedata.put("type", type); // LOUIS : determiner type de coup
+                movedata.put("time", time);
+        return new Move(movedata);
+    }
+    
     public static String getTimeStamp(){
         //MySQL Datetime : YYYY-MM-DD HH:MM:SS
         String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
@@ -34,7 +46,7 @@ public class Move extends DataModel
     {
         
         //recuperer (BDD) tous les moves de la partie
-        ArrayList<DataModel> liste_move = ConnectionManager.find(Move.class, "pid", g.get("id"));
+        ArrayList<DataModel> liste_move = ConnectionManager.find(Move.class, "gid", g.get("id"));
         
         //chercher le move avec la date la plus recente
         String latest_time = liste_move.get(0).get("time");
@@ -50,6 +62,7 @@ public class Move extends DataModel
         return m;
     }
     
+    //vrai si le Move est le dernier qui a été joué actuellement dans la partie
     public boolean isLastFromGame(Game g)
     {
         Move m = Move.getLastFromGame(g);

@@ -5,9 +5,6 @@
  */
 package DataModel;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,14 +20,14 @@ import java.util.logging.Logger;
  */
 public class ConnectionManager {
 
-    private static String url = "jdbc:mysql://localhost:3305/pascard";
-    private static String driverName = "com.mysql.jdbc.Driver";
-    private static String username = "pascard-rw";
-    private static String password = "oBcTvODy";
+    private final static String url = "jdbc:mysql://localhost:3305/pascard";
+    private final static String driverName = "com.mysql.jdbc.Driver";
+    private final static String username = "pascard-rw";
+    private final static String password = "oBcTvODy";
     private static Connection con;
     private static String usernameECE;
     private static String passwordECE;
-    private static HashMap<Class, String> table_map;
+    private static HashMap<Class, String> table_map; //Mapping entre les classes de DataModel et les tables de la BDD
     private static PreparedStatement pstmt_select_simple;
     
     private static void init_table_map()
@@ -41,7 +38,7 @@ public class ConnectionManager {
         table_map.put(Player.class, "users");
     }
     
-    private static void prepare_stmt() throws SQLException
+    static private void prepare_stmt() throws SQLException
     {
         pstmt_select_simple = con.prepareStatement("SELECT * FROM ? WHERE ?=?");
         
@@ -64,7 +61,7 @@ public class ConnectionManager {
         return table_map.get(type);
     }
     
-    public static Connection getConnection() {
+    public static Connection getConnection() throws SQLException, ClassNotFoundException{
         init_table_map();
         Scanner input = new Scanner(System.in);
         System.out.println("login ECE : ");
@@ -82,9 +79,11 @@ public class ConnectionManager {
             // log an exception. fro example:
             ex.printStackTrace();
             System.out.println("Failed to create the database connection.");
+            throw ex;
         } catch (ClassNotFoundException ex) {
             // log an exception. for example:
             System.out.println("Driver not found.");
+            throw ex;
         }
         System.out.println("MySQL connexion successful : " + url);
         return con;
@@ -240,12 +239,13 @@ public class ConnectionManager {
         return find(type,critere);
     }
     
-    //renvoie l'objets ou l'attribut field=value
+    //renvoie l'objet DataModel de type "type" dont l' "id" est id
     public static DataModel findById(Class type, Object id) throws SQLException
     {
         ArrayList<DataModel> d = find(type,"id",id);
         if(!d.isEmpty())
         return (DataModel)d.get(0);
-        else throw new SQLException();
+        else throw new SQLException("No object of type "+type.getSimpleName()+"found for id "+id);
     }
+    
 }

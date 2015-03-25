@@ -101,8 +101,9 @@ public class JavaCore {
                     //////////////////////////////////
                 // nextLine() doit etre remplacé par la sortie de l'arduino
                     /*
-                 arduino_output = reedArray.read();
-                 mon_coup = moveDecoder.decode(arduino_output);
+                arduino_output = reedArray.read();
+                mon_coup = moveDecoder.decode(arduino_output);
+                
                  */
                 mon_coup = input.nextLine();
                     //////////////////////////////////

@@ -233,6 +233,27 @@ public class WeChesspresso {
         }
     }
     
+        public static String getMoveType(String fen, String pos1, String pos2){
+        if(isMoveEP(fen,pos1,pos2)){
+            return "ep";
+        }
+        else if(isMoveLongCastle(fen,pos1,pos2)){
+            return "groc";
+        }
+        else if(isMoveShortCastle(fen,pos1,pos2)){
+            return "proc";
+        }
+        else if(isMovePromotion(fen,pos1,pos2)){
+            return "prom";
+        }
+        else if(isMoveCapturing(fen,pos1,pos2)){
+            return "capt";
+        }
+        else{
+            return "norm";
+        }
+    }
+    
     public static String getNewFen(String fen, String pos1, String pos2) throws IllegalMoveException{
         Position pos=new Position(fen);
         if(isMoveValid(fen,pos1,pos2)){

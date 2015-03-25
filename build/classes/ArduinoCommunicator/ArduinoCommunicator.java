@@ -11,7 +11,6 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Enumeration;
@@ -23,16 +22,13 @@ import java.util.Enumeration;
 
 public class ArduinoCommunicator implements SerialPortEventListener {
     SerialPort serialPort = null;
-    boolean listening = false;
-    boolean available = false;
-    String bufferedInput=null;
-    
+
     private static final String PORT_NAMES[] = { 
         "/dev/tty.usbmodem1411", // Mac OS X
     //        "/dev/usbdev", // Linux
     //        "/dev/tty", // Linux
     //        "/dev/serial", // Linux
-            "COM3", // Windows
+    //        "COM3", // Windows
     };
     
     private String appName;
@@ -47,29 +43,22 @@ public class ArduinoCommunicator implements SerialPortEventListener {
     }
     
     public void validate(){
-        send("valid\n");
+        send("VALID");
     }
     
     public void reject(){
-        send("invalid\n");
-    }
-    
-    public String read(){
-        while(!available);
-        String tmp = bufferedInput;
-        bufferedInput=null;
-        listening=false;
-        available=false;
-        return tmp;
+        send("INVALID");
     }
     
     public void sleep(){
-        send("sleep\n");
+        send("SLEEP");
     }
     
-    public void listen(){
-        listening=true;
-        send("listen\n");
+    public String read(){
+        send("READ");
+        String msg = new String();
+        
+        return msg;
     }
     
     public boolean initialize() {
@@ -78,12 +67,13 @@ public class ArduinoCommunicator implements SerialPortEventListener {
             Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 
             // Enumerate system ports and try connecting to Arduino over each
+            //
             System.out.println( "Trying:");
             while (portId == null && portEnum.hasMoreElements()) {
                 // Iterate through your host computer's serial port IDs
                 //
                 CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
-                System.out.println( "   port " + currPortId.getName() );
+                System.out.println( "   port" + currPortId.getName() );
                 for (String portName : PORT_NAMES) {
                     if ( currPortId.getName().equals(portName) 
                       || currPortId.getName().startsWith(portName)) {
@@ -127,7 +117,7 @@ public class ArduinoCommunicator implements SerialPortEventListener {
     
     private void send(String data) {
         try {
-            System.out.println("Sent Arduino: '" + data +"'");
+            System.out.println("Sending data: '" + data +"'");
             
             // open the streams and send the "y" character
             output = serialPort.getOutputStream();
@@ -155,41 +145,39 @@ public class ArduinoCommunicator implements SerialPortEventListener {
     @Override
     public synchronized void serialEvent(SerialPortEvent oEvent) {
         System.out.println("Event received: " + oEvent.toString());
-        
         try {
             switch (oEvent.getEventType() ) {
-                case SerialPortEvent.DATA_AVAILABLE:
+                case SerialPortEvent.DATA_AVAILABLE: 
                     if ( input == null ) {
-                        input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+                        input = new BufferedReader(
+                            new InputStreamReader(
+                                    serialPort.getInputStream()));
                     }
-                    bufferedInput = input.readLine();
-                    System.out.println("Arduino sent: '"+bufferedInput+"'");
+                    String inputLine = input.readLine();
                     
-                    
-                    
+                    System.out.println(inputLine);
                     break;
+
                 default:
                     break;
             }
-        }
+        } 
         catch (Exception e) {
             System.err.println(e.toString());
         }
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args){
         ArduinoCommunicator test = new ArduinoCommunicator();
         if ( test.initialize() ) {
+            test.send("y");
             try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-            test.listen();
-            String out = test.read();
-            System.out.println(out);
-            test.validate();
+            test.send("n");
             try { Thread.sleep(2000); } catch (InterruptedException ie) {}
             test.close();
         }
 
         // Wait 5 seconds then shutdown
-        try { Thread.sleep(100000); } catch (InterruptedException ie) {}
+        try { Thread.sleep(2000); } catch (InterruptedException ie) {}
     }
 }

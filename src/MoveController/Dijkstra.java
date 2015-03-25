@@ -101,7 +101,7 @@ public class Dijkstra
 		for(int i=0 ; i<size ; i++){
 			for(int j=0 ; j<size ; j++){
 				vertexArray[i][j].adjacencies = new ArrayList();
-
+                                
 				if(i+1<size) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i+1][j], 1, i+1, j));
 				if(i>0) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i-1][j], 1, i-1, j));
 				if(j+1<size) vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j+1], 1, i, j+1));
@@ -125,8 +125,10 @@ public class Dijkstra
 				// Ne pas relier au maillage les cases occupées
 				if(occupied.contains(i*size1+j)){
 					//System.out.println("Case "+i+"-"+j+"occupee");
-					continue;
+                                    v1[i][j].adjacencies.clear();
+                                    continue;
 				}
+                                
 				v1[i][j].adjacencies.add(new Edge(v2[i][j],sqrt2_2,i,j));
 				v1[i][j].adjacencies.add(new Edge(v2[i+1][j],sqrt2_2,i,j));
 				v1[i][j].adjacencies.add(new Edge(v2[i][j+1],sqrt2_2,i,j));
@@ -155,6 +157,7 @@ public class Dijkstra
 
 	private static List<Position> getShortestPath(int a, int b, List<Integer> occupied)
 	{
+            
 		Vertex[][] center = makeVertexMap(12,0.5);
 		Vertex v_start =center[a%12][a/12];
 		Vertex v_end = center[b%12][b/12];
