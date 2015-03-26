@@ -407,6 +407,8 @@ vertexArray[i][j].adjacencies = new ArrayList<Edge>();
 					paths.add(tmpath);
 					varBoard.get(i).set(j, moveTo.get(i).get(j));
 					varBoard.get((int)(tmpath.getPositionati(0).getY()-0.5)).set((int)(tmpath.getPositionati(0).getX()-0.5),'.');
+					//check/complete that
+					//needToMove.get().set(,'.');
 				}
 			}
 		}
