@@ -25,8 +25,9 @@ public class Position{
 		this.y=b;
 	}
 
+        @Override
 	public String toString(){
-		return new String(x+" "+y);
+		return x+" "+y;
 	}
 
 	public Position(int pos){
