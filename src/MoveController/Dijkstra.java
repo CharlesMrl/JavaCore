@@ -95,7 +95,7 @@ public class Dijkstra{
 
 		for(int i=0 ; i<size ; i++){
 			for(int j=0 ; j<size ; j++){
-vertexArray[i][j].adjacencies = new ArrayList<Edge>();
+				vertexArray[i][j].adjacencies = new ArrayList<Edge>();
 
 
 				if(i+1<size)
@@ -153,10 +153,10 @@ vertexArray[i][j].adjacencies = new ArrayList<Edge>();
 				// Ne pas relier au maillage les cases occupées
 				if(occupied.contains(i*size1+j)){
 					//System.out.println("Case "+i+"-"+j+"occupee");
-                                    v1[i][j].adjacencies.clear();
-                                    continue;
+					//v1[i][j].adjacencies.clear();
+					continue;
 				}
-                                
+
 				v1[i][j].adjacencies.add(new Edge(v2[i][j],sqrt2_2,i,j));
 				v1[i][j].adjacencies.add(new Edge(v2[i+1][j],sqrt2_2,i,j));
 				v1[i][j].adjacencies.add(new Edge(v2[i][j+1],sqrt2_2,i,j));
@@ -380,16 +380,17 @@ vertexArray[i][j].adjacencies = new ArrayList<Edge>();
 		ArrayList<ArrayList<Character>> needToMove = substrctBoards(getFullBoard(sourceFen), getFullBoard(targetFen));
 		ArrayList<ArrayList<Character>> moveTo = substrctBoards(getFullBoard(targetFen), getFullBoard(sourceFen));
 		ArrayList<ArrayList<Character>> varBoard = sourceBoard;
-
+		
+		System.out.println("Source Board");
 		printBoard(sourceBoard);
-		System.out.println("");
+		System.out.println("\nTarget Board");
 		printBoard(targetBoard);
-		System.out.println("");
+		System.out.println("\nNeed to move");
 		printBoard(needToMove);
-		System.out.println("");
+		System.out.println("\nMove To");
 		printBoard(moveTo);
 		System.out.println("");
-		
+
 		for(int i = 0; i < moveTo.size(); i++){
 			for(int j = 0; j < moveTo.get(0).size(); j++){
 				if(!moveTo.get(i).get(j).equals('.')){
@@ -408,7 +409,7 @@ vertexArray[i][j].adjacencies = new ArrayList<Edge>();
 					varBoard.get(i).set(j, moveTo.get(i).get(j));
 					varBoard.get((int)(tmpath.getPositionati(0).getY()-0.5)).set((int)(tmpath.getPositionati(0).getX()-0.5),'.');
 					//check/complete that
-					//needToMove.get().set(,'.');
+					needToMove.get((int)(tmpath.getPositionati(0).getY()-0.5)).set((int)(tmpath.getPositionati(0).getX()-0.5),'.');
 				}
 			}
 		}
@@ -421,7 +422,7 @@ vertexArray[i][j].adjacencies = new ArrayList<Edge>();
 
 
 	public static void main(String[] args){
-		
+
 		// TO DO
 		// tjr petit pb avec dijlstra
 		// reste plus qu'a faire des tests normalement c'est ok
