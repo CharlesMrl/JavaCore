@@ -356,6 +356,7 @@ public class Dijkstra{
 			for(int j = 0; j < board.get(0).size(); j++){
 				if(board.get(i).get(j).equals(piece)){
 					list.add(i*12+j);
+					System.out.println("i = "+i+" j = "+j);
 				}
 			}
 		}
@@ -394,25 +395,35 @@ public class Dijkstra{
 		for(int i = 0; i < moveTo.size(); i++){
 			for(int j = 0; j < moveTo.get(0).size(); j++){
 				if(!moveTo.get(i).get(j).equals('.')){
+					tmpaths.clear();
+					System.out.println("Taking care of "+moveTo.get(i).get(j));
 					ArrayList<Integer> possibleFrom = getPossibleFrom(needToMove, moveTo.get(i).get(j));
 					for(Integer a : possibleFrom){
 						tmpaths.add(new Path(getShortestPath(a,i*12+j, getOccupied(varBoard))));
 					}
 					Path tmpath = new Path(new ArrayList<Position>());
 					tmpath.length=999999999;
+					System.out.println("Possible paths");
 					for(Path a : tmpaths){
+						System.out.println(a);
 						if(a.length < tmpath.length){
 							tmpath = a;
 						} 
 					}
+					
 					paths.add(tmpath);
+					System.out.println("Moving piece -> "+moveTo.get(i).get(j));
+					System.out.println(tmpath);
 					varBoard.get(i).set(j, moveTo.get(i).get(j));
 					varBoard.get((int)(tmpath.getPositionati(0).getY()-0.5)).set((int)(tmpath.getPositionati(0).getX()-0.5),'.');
 					//check/complete that
-					needToMove.get((int)(tmpath.getPositionati(0).getY()-0.5)).set((int)(tmpath.getPositionati(0).getX()-0.5),'.');
+					needToMove.get((int)(tmpath.getPositionati(0).getY()-0.5)).set((int)(tmpath.getPositionati(0).getX()-0.5),'X');
 				}
 			}
 		}
+		System.out.println("\nNeed to move");
+		printBoard(needToMove);
+		System.out.println("\nFinal board");
 		printBoard(varBoard);
 		return paths;
 	}
@@ -424,15 +435,16 @@ public class Dijkstra{
 	public static void main(String[] args){
 
 		// TO DO
-		// tjr petit pb avec dijlstra
-		// reste plus qu'a faire des tests normalement c'est ok
-
+		// dernier problème: adjacences
+		
 		String feninit = "rnbqkbnr/pppp2pp/8/4pp2/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
-		String newfen = "rnbqkbnr/pppp2pp/8/3pp3/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
+		String newfen1 = "rnbqkbnr/pppp2pp/8/3pp3/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
+		String newfen2 = "rnbqkbnr/pppp2pp/8/3pp3/8/1P6/P1PPPPPP/RNBQKBNR w KQkq -";
+		String newfen3 = "rnbqkbnr/pppp2pp/8/3pp3/1P6/8/P1PPPPPP/RNBQKBNR w KQkq -";
 
 
-		ArrayList<Path> paths = getAllPaths(feninit, newfen);
-		System.out.println(paths);
+		ArrayList<Path> paths = getAllPaths(feninit, newfen3);
+
 
 
 		/*
