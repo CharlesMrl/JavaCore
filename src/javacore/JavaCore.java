@@ -92,7 +92,8 @@ public class JavaCore {
         String mon_coup = null;
         String newFen = null;
         //Si mon tour de jouer
-        if (current_game.myTurn(user.get("id"))) {
+        //if (current_game.myTurn(user.get("id"))) {
+        if (true){
             current_game.sync();
             printFEN(current_game.get("fen"));
             do {
