@@ -6,3 +6,5 @@ cd /home/pi/Desktop/wechess/
 git clone https://github.com/bpascard/weChess_Stepper.git
 git clone https://github.com/CharlesMrl/JavaCore.git
 git clone git://git.drogon.net/wiringPi
+cd wiringPi
+./build
