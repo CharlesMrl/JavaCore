@@ -10,6 +10,19 @@ package ArduinoCommunicator;
  */
 public class MoveDecoder {
     
+    private class pieceEvent{
+        
+        String pos;
+        boolean isUp;
+        
+        public pieceEvent(String in){
+            if(in.charAt(0)!='u')isUp = false;
+            else if(in.charAt(0)!='d'){
+                isUp=true;
+            }
+            pos=in.substring(1, 3);
+        }
+    }
     
     public MoveDecoder()
     {
@@ -35,7 +48,7 @@ public class MoveDecoder {
         }
         
         else  throw new  UnrecognizedMove("Coup impossible");
-
+        
             
         System.out.println("Move translated: "+ coup);
         return coup;
