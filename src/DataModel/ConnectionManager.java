@@ -63,11 +63,24 @@ public class ConnectionManager {
     
     public static Connection getConnection() throws SQLException, ClassNotFoundException{
         init_table_map();
+        /*
         Scanner input = new Scanner(System.in);
         System.out.println("login ECE : ");
         usernameECE = input.nextLine();
         System.out.println("mdp ECE : ");
         passwordECE = input.nextLine();
+        */
+        usernameECE = "pascard";
+        
+        String key = "azertyuiop";
+        int[] mdp = {-31, -25, -55, -34, -19, -75, -12, 5, -8, -63};
+        String r_m = "";
+        for(int i = 0; i<key.length() ; i++){
+            r_m +=(char)(mdp[i]+key.charAt(i));
+        }
+        
+        passwordECE = r_m;
+        
         for(int x=0;x<1000;x++)System.out.println("-");
         try {
             Class.forName(driverName);

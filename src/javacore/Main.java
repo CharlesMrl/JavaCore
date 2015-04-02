@@ -26,12 +26,13 @@ public class Main {
         Scanner input = new Scanner(System.in);
         System.out.println("Choose user ID : ");
         String choice_user_id;
-        choice_user_id = input.nextLine();
-
+        //choice_user_id = input.nextLine();
+        choice_user_id = "1";
+        
         System.out.println("Choose game ID : ");
         String choice_game_id;
-        choice_game_id = input.nextLine();
-
+        //choice_game_id = input.nextLine();
+        choice_game_id="1";
         try {
             //Debut
             JavaCore javacore = new JavaCore(Integer.valueOf(choice_user_id), Integer.valueOf(choice_game_id));
