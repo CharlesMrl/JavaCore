@@ -14,7 +14,6 @@ import java.util.ArrayList;
  */
 public class MoveDecoder {
     
-    private String arduinoCode;
     /**
      * class containing the event of a piece (position and boolean for the event up or down)
      */
@@ -47,9 +46,8 @@ public class MoveDecoder {
      * 
      * @param code 
      */
-    public MoveDecoder(String code)
+    public MoveDecoder()
     {
-        arduinoCode = code;
     } 
     /**
      * gets all the pieceEvent down
@@ -140,7 +138,7 @@ public class MoveDecoder {
      * @return
      * @throws ArduinoCommunicator.MoveDecoder.UnrecognizedMove 
      */
-    public String decode() throws UnrecognizedMove
+    public String decode(String arduinoCode) throws UnrecognizedMove
     {
         String[] mySplit = arduinoCode.split(" ");
         String coup;
