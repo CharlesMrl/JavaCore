@@ -110,7 +110,8 @@ public class JavaCore {
                 
                  */
                  arduino_output = input.nextLine();
-                 mon_coup = MoveDecoder.decode(arduino_output);
+                 MoveDecoder decoder = new MoveDecoder(arduino_output);
+                 mon_coup = decoder.decode();
 
                 //////////////////////////////////
 
