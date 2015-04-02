@@ -12,3 +12,5 @@
 *.properties
 
 *.xml
+
+*.class
