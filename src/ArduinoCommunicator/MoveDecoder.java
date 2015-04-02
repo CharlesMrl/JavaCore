@@ -215,7 +215,7 @@ public class MoveDecoder {
         
         System.out.println("Move decoder translated: "+ coup);
         return coup;
-    } 
+    }
     
     public static class UnrecognizedMove extends Exception{
         
