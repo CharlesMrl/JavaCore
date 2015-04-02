@@ -44,13 +44,11 @@ public class MoveDecoder {
     
     /**
      * 
-     * @param code 
      */
     public MoveDecoder()
     {
-        
     }
-    /**
+    /*
      * gets all the pieceEvent down
      * @param list 
      * @return 
