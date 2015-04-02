@@ -50,7 +50,7 @@ public class MoveDecoder {
     public MoveDecoder(String code)
     {
         arduinoCode = code;
-    }
+    } 
     /**
      * gets all the pieceEvent down
      * @param list 
