@@ -22,7 +22,7 @@ import wechesspresso.*;
  * @author Bastien
  */
 public class JavaCore {
-    
+
     public ArduinoCommunicator arduino;
     public Connection con;
     public Game current_game;
@@ -62,14 +62,17 @@ public class JavaCore {
 
     public JavaCore(int user_id, int game_id) throws SQLException, ClassNotFoundException {
         //login
-            this.con = ConnectionManager.getConnection();
+        this.con = ConnectionManager.getConnection();
 
-            this.user = null;
-            this.current_game = null;
-            user = Player.findById(String.valueOf(user_id));
-            //selection partie
-            current_game = Game.findById(game_id);
-            current_game.print();
+        this.user = null;
+        this.current_game = null;
+        user = Player.findById(String.valueOf(user_id));
+        //selection partie
+        current_game = Game.findById(game_id);
+        current_game.print();
+        this.arduino = new ArduinoCommunicator();
+        if ( !this.arduino.initialize() )
+            System.out.println("Arduino init failed!");
     }
 
     public void setCurrentGame(int game_id) {
@@ -91,47 +94,54 @@ public class JavaCore {
     public void loop() throws Exception {
         String mon_coup = null;
         String newFen = null;
+        boolean invalid;
         //Si mon tour de jouer
-        //if (current_game.myTurn(user.get("id"))) {
-        if (true){
+        if (current_game.myTurn(user.get("id"))) {
+        //if (true) {
             current_game.sync();
             printFEN(current_game.get("fen"));
+            arduino.init();
+            // Attendre la detection d'un coup
+                if (current_game.get("uidw").equals(user.get("id"))) {
+                    System.out.println("Your turn, you play WHITE : ");
+                    arduino.listen("white");
+                } else {
+                    System.out.println("Your turn, you play BLACK : ");
+                    arduino.listen("black");
+                }
             do {
-                // Attendre la detection d'un coup
-                if(current_game.get("uidw").equals(user.get("id")))
-                System.out.println("Your turn, you play WHITE : ");
-                else
-                System.out.println("Your turn, you play BLACK : ");
-                //////////////////////////////////
-                // nextLine() doit etre remplacé par la sortie de l'arduino
-                    /*
-                arduino_output = reedArray.read();
-                mon_coup = moveDecoder.decode(arduino_output);
+                invalid = false;
                 
-                 */
-                 arduino_output = input.nextLine();
-                 mon_coup = MoveDecoder.decode(arduino_output);
-
-                //////////////////////////////////
-
+                ///////////////////////////
+                // COMMUNICATION ARDUINO //
+                //arduino_output = input.nextLine();
+                
+                arduino_output = arduino.read();
+                System.out.println("Arduino sent: '"+arduino_output+"'");
                 try {
+                mon_coup = MoveDecoder.decode(arduino_output);
+
+                ///////////////////////////
+                ///////////////////////////
+                
                     //Verifier que le coup est valide
                     newFen = WeChesspresso.getNewFen(current_game.get("fen"), mon_coup);
-                    if (newFen.equals("no")) {
-                        System.out.println("Invalid move !");
-                        WeChesspresso.printAllMoves(current_game.get("fen"));
-                    }
-                } catch (IllegalMoveException ex) {
-                    Logger.getLogger(JavaCore.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    arduino.invalid();
+                    System.out.println("Invalid move !");
+                    WeChesspresso.printAllMoves(current_game.get("fen"));
+                    invalid=true;
+                    //Logger.getLogger(JavaCore.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } while (newFen.equals("no"));
+            } while (invalid==true);
+            arduino.valid();
             printFEN(newFen);
             //Envoi des infos du coup
             Move m = Move.make(current_game.get("id"),
                     user.get("id"),
                     newFen,
                     mon_coup.substring(0, 2),
-                    mon_coup.substring(2),
+                    mon_coup.substring(2, 4),
                     WeChesspresso.getMoveType(current_game.get("fen"), mon_coup),
                     Move.getTimeStamp());
             m.print();
@@ -163,7 +173,7 @@ public class JavaCore {
             Move m = Move.getLastFromGame(current_game);
             System.out.print("Move received : ");
             m.print();
-            
+
             /* Code de déplacement des moteurs
              * pour effectuer le move recu
              * de l'adversaire.
@@ -173,7 +183,7 @@ public class JavaCore {
              MotorController.run(path_list);
              */
             ArrayList<Path> path_list = PathGenerator.getPathList(m, current_game.get("fen"));
-             MotorController.run(path_list);
+            MotorController.run(path_list);
             //Si echec
             if (current_game.isCheck()) {
                 System.out.println("CHECK! ... *stress*");

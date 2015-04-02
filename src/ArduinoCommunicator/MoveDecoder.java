@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 package ArduinoCommunicator;
+
+import java.io.IOException;
+
 /**
  *
  * @author charlesmariller
@@ -83,12 +86,12 @@ public class MoveDecoder {
         
         else  throw new  UnrecognizedMove("Coup impossible");
         
-            
+        
         System.out.println("Move translated: "+ coup);
         return coup;
     }
     
-    public static class UnrecognizedMove extends Exception{
+    public static class UnrecognizedMove extends IOException{
         
         public UnrecognizedMove(String message)
         {

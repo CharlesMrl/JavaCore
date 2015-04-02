@@ -48,12 +48,37 @@ public class ArduinoCommunicator implements SerialPortEventListener {
         appName = getClass().getName();
     }
     
-    public void validate(){
+    public void valid(){
         send("valid\n");
     }
     
-    public void reject(){
+    public void invalid(){
         send("invalid\n");
+    }
+    
+    public void sleep(){
+        send("sleep\n");
+    }
+    
+    public void listen(String player){
+        listening=true;
+        switch (player) {
+            case "white":
+                send("listen 1\n");
+                break;
+            case "black":
+                send("listen 2\n");
+                break;
+        }
+    }
+    
+    public void init(){
+        send("init\n");
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ArduinoCommunicator.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public String read(){
@@ -71,14 +96,6 @@ public class ArduinoCommunicator implements SerialPortEventListener {
         return tmp;
     }
     
-    public void sleep(){
-        send("sleep\n");
-    }
-    
-    public void listen(){
-        listening=true;
-        send("listen\n");
-    }
     
     public void setBuffer(String b){
         this.bufferedInput = b;
@@ -139,7 +156,7 @@ public class ArduinoCommunicator implements SerialPortEventListener {
     
     private void send(String data) {
         try {
-            System.out.print("Sent Arduino: " + data);
+            System.out.print("Sent Arduino: '" + data+"'");
             
             // open the streams and send the "y" character
             output = serialPort.getOutputStream();
@@ -192,12 +209,17 @@ public class ArduinoCommunicator implements SerialPortEventListener {
         ArduinoCommunicator test = new ArduinoCommunicator();
         if ( test.initialize() ) {
             while(true){
-                try { Thread.sleep(1000); } catch (InterruptedException ie) {}
-            test.listen();
+                try { Thread.sleep(2000); } catch (InterruptedException ie) {
+                
+                }
+                //test.send("test\n");
+            test.init();
+            test.listen("white");
             String out = test.read();
             System.out.println("Received: "+out);
-            test.validate();
-            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
+            test.valid();
+            try { Thread.sleep(2000); } catch (InterruptedException ie) {
+            }
             }
         }
 
