@@ -28,6 +28,7 @@ public class ArduinoCommunicator implements SerialPortEventListener {
     boolean listening = false;
     boolean available = false;
     public String bufferedInput="";
+    public MoveDecoder decoder = new MoveDecoder();
     
     private static final String PORT_NAMES[] = { 
         "/dev/tty.usbmodem1411", // Mac OS X

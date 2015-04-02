@@ -5,11 +5,8 @@
  */
 package ArduinoCommunicator;
 
-<<<<<<< HEAD
 import java.io.IOException;
-=======
 import java.util.ArrayList;
->>>>>>> 7ce34b39967febb39dcc038d3c3b604bf0395b65
 
 /**
  *
@@ -217,12 +214,8 @@ public class MoveDecoder {
         
         else  throw new  UnrecognizedMove("Coup impossible");
         
-<<<<<<< HEAD
-        
         System.out.println("Move translated: "+ coup);
-=======
         System.out.println("Move decoder translated: "+ coup);
->>>>>>> 7ce34b39967febb39dcc038d3c3b604bf0395b65
         return coup;
     }
     
