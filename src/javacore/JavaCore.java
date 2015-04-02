@@ -112,12 +112,22 @@ public class JavaCore {
             do {
                 invalid = false;
                 
+<<<<<<< HEAD
                 ///////////////////////////
                 // COMMUNICATION ARDUINO //
                 //arduino_output = input.nextLine();
                 
                 arduino_output = arduino.read();
                 System.out.println("Arduino sent: '"+arduino_output+"'");
+=======
+                 */
+                 arduino_output = input.nextLine();
+                 MoveDecoder decoder = new MoveDecoder(arduino_output);
+                 mon_coup = decoder.decode();
+
+                //////////////////////////////////
+
+>>>>>>> 7ce34b39967febb39dcc038d3c3b604bf0395b65
                 try {
                 mon_coup = MoveDecoder.decode(arduino_output);
 
