@@ -72,7 +72,7 @@ public class JavaCore {
         current_game.print();
         this.arduino = new ArduinoCommunicator();
         if (!this.arduino.initialize()) {
-            System.out.println("Arduino init failed!");
+            System.out.println("Echec Initialisation Arduino! Branche le?");
         }
     }
 
