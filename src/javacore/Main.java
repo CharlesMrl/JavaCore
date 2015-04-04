@@ -16,22 +16,26 @@ import java.util.logging.Logger;
  * @author Bast
  */
 public class Main {
-
+        
     public static void main(String[] args) {
-
+        String choice_user_id;
+        String choice_game_id;
         // Infos
         //Player.find("name", "Pascard").get(0).print();
         //Player.find("name", "Mariller").get(0).print();
         //Setup
+        
+        
+        /*
         Scanner input = new Scanner(System.in);
         System.out.println("Choose user ID : ");
-        String choice_user_id;
-        //choice_user_id = input.nextLine();
-        choice_user_id = "1";
+        choice_user_id = input.nextLine();
         
         System.out.println("Choose game ID : ");
-        String choice_game_id;
-        //choice_game_id = input.nextLine();
+        choice_game_id = input.nextLine();
+        */
+        
+        choice_user_id = "1";
         choice_game_id="1";
         try {
             //Debut

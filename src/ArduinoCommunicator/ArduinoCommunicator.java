@@ -32,9 +32,9 @@ public class ArduinoCommunicator implements SerialPortEventListener {
     
     private static final String PORT_NAMES[] = { 
         "/dev/tty.usbmodem1411", // Mac OS X
-    //        "/dev/usbdev", // Linux
-    //        "/dev/tty", // Linux
-    //        "/dev/serial", // Linux
+            //"/dev/usbdev", // Linux
+            //"/dev/tty", // Linux
+            "/dev/serial", // Linux
             "COM3", // Windows
     };
     

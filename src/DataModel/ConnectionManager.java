@@ -81,7 +81,6 @@ public class ConnectionManager {
         
         passwordECE = r_m;
         
-        for(int x=0;x<1000;x++)System.out.println("-");
         try {
             Class.forName(driverName);
             SSHTunnel ssh = new SSHTunnel(usernameECE, passwordECE);
