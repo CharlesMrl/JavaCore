@@ -61,6 +61,30 @@ public class ConnectionManager {
         return table_map.get(type);
     }
     
+    public static Connection getConnectionLocal() throws SQLException, ClassNotFoundException{
+        init_table_map();
+        String l_url = "jdbc:mysql://localhost:8889/chessdb";
+        String l_username = "wechess";
+        String l_password = "wechess";
+        
+        try {
+            Class.forName(driverName);
+            
+            con = DriverManager.getConnection(l_url, l_username, l_password);
+        } catch (SQLException ex) {
+            // log an exception. fro example:
+            ex.printStackTrace();
+            System.out.println("Failed to create the database connection.");
+            throw ex;
+        } catch (ClassNotFoundException ex) {
+            // log an exception. for example:
+            System.out.println("Driver not found.");
+            throw ex;
+        }
+        System.out.println("MySQL connexion successful : " + url);
+        return con;
+    }
+    
     public static Connection getConnection() throws SQLException, ClassNotFoundException{
         init_table_map();
         /*

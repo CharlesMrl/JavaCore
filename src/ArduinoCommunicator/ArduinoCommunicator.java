@@ -106,7 +106,7 @@ public class ArduinoCommunicator implements SerialPortEventListener {
         try {
             CommPortIdentifier portId = null;
             Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
-
+            
             // Enumerate system ports and try connecting to Arduino over each
             System.out.println( "Trying:");
             while (portId == null && portEnum.hasMoreElements()) {
@@ -128,8 +128,14 @@ public class ArduinoCommunicator implements SerialPortEventListener {
                     }
                 }
             }
-        
+            /*if(portId == null){
+                CommPortIdentifier currPortId = CommPortIdentifier.getPortIdentifier("/dev/ttyACM0");
+                serialPort = (SerialPort)currPortId.open(appName, TIME_OUT);
+            }*/
+            
+            
             if (portId == null || serialPort == null) {
+                
                 System.out.println("Oops... Could not connect to Arduino");
                 return false;
             }
