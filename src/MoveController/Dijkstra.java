@@ -7,6 +7,7 @@ import java.util.Collections;
 class Vertex implements Comparable<Vertex>{
 
 	public final double x;
+        public boolean occupied=false;
 	public final double y;
 	public ArrayList<Edge> adjacencies;
 	public double minDistance = Double.POSITIVE_INFINITY;
@@ -48,7 +49,7 @@ public class Dijkstra{
 	private static void computePaths(Vertex source){
 
 		source.minDistance = 0.0;
-		PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>();
+		PriorityQueue<Vertex> vertexQueue = new PriorityQueue<>();
 		vertexQueue.add(source);
 
 		while (!vertexQueue.isEmpty()) {
@@ -56,8 +57,16 @@ public class Dijkstra{
 			// Visit each edge exiting u
 			for (Edge e : u.adjacencies){
 				Vertex v = e.target;
-				double weight = e.weight;
-				double distanceThroughU = u.minDistance + weight;
+				
+                                double weight;
+                                //Ajout if Bastien
+                                if(v.occupied){
+                                    weight = Double.POSITIVE_INFINITY;
+                                    //System.out.println(v.x+" "+v.y+" is occupied");
+                                }
+                                        else weight = e.weight;
+				
+                                double distanceThroughU = u.minDistance + weight;
 				if (distanceThroughU < v.minDistance) {
 					//System.out.println();
 					vertexQueue.remove(v);
@@ -79,7 +88,10 @@ public class Dijkstra{
 		return path;
 	}
 
-
+        private static void markOccupied(Vertex[][] v1, List<Integer> occupied){
+            
+        }
+        
 	// Cree un quadrillage de Vertex reliés entre eux
 	private static Vertex[][] makeVertexMap(int size, double shift){
 
@@ -88,17 +100,14 @@ public class Dijkstra{
 		String key;
 
 		for(int i=0 ; i<size ; i++){
-			for(int j=0 ; j<size ; j++){
-				vertexArray[i][j]=new Vertex(i+shift,j+shift);
+			for(int j=0 ; j<size ; j++){vertexArray[i][j]=new Vertex(i+shift,j+shift);
 			}
 		}
 
 		for(int i=0 ; i<size ; i++){
 			for(int j=0 ; j<size ; j++){
 				vertexArray[i][j].adjacencies = new ArrayList<Edge>();
-
-
-				if(i+1<size)
+                                if(i+1<size)
 					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i+1][j], 1, i+1, j));
 				if(i>0)
 					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i-1][j], 1, i-1, j));
@@ -143,20 +152,22 @@ public class Dijkstra{
 	}
 
 	// Relie 2 quadrillages de Vertex (1 quadrillage pour les arretes, 1 quadrillages pour les faces)
-	private static void linkVertexMaps(Vertex[][] v1, Vertex[][] v2, int size1, List<Integer> occupied){
+	private static void linkVertexMaps(Vertex[][] v1, Vertex[][] v2, int size1){
 
 		//Estimation de sqrt(2)/2, la distance entre une arete et le milieu d'une face
 		double sqrt2_2 = 0.70710678;
 
 		for(Integer i=0 ; i<size1 ; i++){
 			for(Integer j=0 ; j<size1 ; j++){
-				// Ne pas relier au maillage les cases occupées
+				/*
+                                // Ne pas relier au maillage les cases occupées
 				if(occupied.contains(i*size1+j)){
 					//System.out.println("Case "+i+"-"+j+"occupee");
 					//v1[i][j].adjacencies.clear();
 					continue;
 				}
-
+                                */
+                            
 				v1[i][j].adjacencies.add(new Edge(v2[i][j],sqrt2_2,i,j));
 				v1[i][j].adjacencies.add(new Edge(v2[i+1][j],sqrt2_2,i,j));
 				v1[i][j].adjacencies.add(new Edge(v2[i][j+1],sqrt2_2,i,j));
@@ -190,10 +201,21 @@ public class Dijkstra{
 		Vertex v_end = center[b%12][b/12];
 		Vertex[][] corner = makeVertexMap(13,0);
 
-		linkVertexMaps(center,corner,12,occupied);
+		linkVertexMaps(center,corner,12);
+                for(Integer i=0 ; i<12 ; i++){
+			for(Integer j=0 ; j<12 ; j++){
+				// Ne pas relier au maillage les cases occupées
+				if(occupied.contains(i*12+j)){
+					//System.out.println("Case "+i+"-"+j+"occupee");
+					center[i][j].occupied=true;
+                                }
+                        }
+                }
 		computePaths(v_start); // run Dijkstra
-		List<Vertex> path = getShortestPathTo(v_end);
-		return vertex_to_position(path);
+		List<Vertex> vpath = getShortestPathTo(v_end);
+                List<Position> path = vertex_to_position(vpath) ;
+                //path = correctPath(path);
+		return path;
 	}
 
 	private static List<Position> vertex_to_position(List<Vertex> l){
@@ -298,26 +320,44 @@ public class Dijkstra{
 	// affiche le tableau représentant l'échiquier
 	private static void printBoard(ArrayList<ArrayList<Character>> board){
 		for(int i = 0; i < board.size(); i++){
+                    System.out.print(i);
 			for(int j = 0; j < board.get(0).size(); j++){
 				System.out.print(board.get(i).get(j)+" ");
 			}
 			System.out.println();
 		}
+                for(int j = 0; j < board.get(0).size(); j++)
+                {
+                    System.out.print(" "+j%10);
+                }
+                System.out.println();
 	}
 
 	// reçoit une fen et retourne une liste des cases occupées sous la forme x*12+y
 	public static ArrayList<Integer> getOccupied(String fen){
-
+                
 		ArrayList<ArrayList<Character>> fullBoard = getFullBoard(fen);
 		ArrayList<Integer> liste = new ArrayList<Integer>();
-		for(int i = fullBoard.size() - 1; i >= 0; i--){
+		
+                for(int i = fullBoard.size() - 1; i >= 0; i--){
 			for(int j = 0; j < fullBoard.get(0).size(); j++){
 				if(!fullBoard.get(i).get(j).equals('.')){
-					//System.out.println(j+" "+(fullBoard.size()-i-1));
-					liste.add(j*12+(fullBoard.size()-i-1));
+					System.out.println(j+" "+(fullBoard.size()-i-1+" - case #"+(j+12*(fullBoard.size()-i-1))));
+					liste.add(j+12*(fullBoard.size()-i-1));
 				}
 			}
 		}
+                
+                /*
+                for(int i = 0; i < 12 ; i++){
+			for(int j = 0; j < 8; j++){
+				if(!fullBoard.get(i).get(j).equals('.')){
+					System.out.println(i+" "+j);
+					liste.add(j*12+i);
+				}
+			}
+		}
+                */
 		return liste;
 	}
 
@@ -443,11 +483,11 @@ public class Dijkstra{
 		String newfen3 = "rnbqkbnr/pppp2pp/8/3pp3/1P6/8/P1PPPPPP/RNBQKBNR w KQkq -";
 
 
-		ArrayList<Path> paths = getAllPaths(feninit, newfen3);
+		ArrayList<Path> paths = getAllPaths(feninit, newfen2);
 
 
 
-		/*
+		
 		// Simple dijkstra test
 		List<Integer> cases_prises = new ArrayList<Integer>();
 		int start_x = 6;
@@ -459,16 +499,17 @@ public class Dijkstra{
 
 		String fen = "rnbqkbnr/pppp2pp/8/4pp2/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
 		ArrayList<ArrayList<Character>> teb = getFullBoard(fen);
-		printBoard(teb);
+		//printBoard(teb);
 		cases_prises = getOccupied(fen);
+                
 		List<Position> path = getShortestPath(start, end, cases_prises);
 		path = correctPath(path);
 		System.out.println("\n"+path.toString());
-		 */
+		
 
 
 		/*
-		 * TESTS
+		  TESTS
 		String fen = "R1b1k2n/ppp5/4K2p/8/3p4/8/Pq6/3Q1Bb1 w KQkq - 0 5";
 
 		ArrayList<ArrayList<Character>> tab = getTabFromFen(fen);

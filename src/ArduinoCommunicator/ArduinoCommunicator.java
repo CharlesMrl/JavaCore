@@ -128,11 +128,10 @@ public class ArduinoCommunicator implements SerialPortEventListener {
                     }
                 }
             }
-            /*if(portId == null){
+            if(portId == null){
                 CommPortIdentifier currPortId = CommPortIdentifier.getPortIdentifier("/dev/ttyACM0");
                 serialPort = (SerialPort)currPortId.open(appName, TIME_OUT);
-            }*/
-            
+            }
             
             if (portId == null || serialPort == null) {
                 

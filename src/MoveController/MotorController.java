@@ -6,6 +6,7 @@
 package MoveController;
 
 import DataModel.Game;
+import static MoveController.Dijkstra.correctPath;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +29,7 @@ public class MotorController {
         for (Path path : path_list) {
             cmd = "";
             int size = path.positions.size();
-            for(int i=0; i<size-1;i++){
+            for(int i=0; i<size;i++){
                 cmd += path.positions.get(i).toString();
                 cmd += " ";
                 if(i==0) cmd += "x x ";
@@ -65,7 +66,8 @@ public class MotorController {
         List<Path> lpath = new ArrayList<>();
         
         
-        Path p = Dijkstra.getShortestPath(new Position("c6"), new Position("a1"), fen);
+        Path p = Dijkstra.getShortestPath(new Position("b1"), new Position("a3"), fen);
+        
         lpath.add(p);
         p = Dijkstra.getShortestPath(new Position("a2"), new Position("a4"), fen);
         lpath.add(p);

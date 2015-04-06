@@ -52,8 +52,9 @@ public class Position{
 	}
 	
 	public Position(String pos){
-		this.x=pos.charAt(0)-'a'+0.5;
-		this.y=pos.charAt(1)+0.5;
+		this.x=pos.charAt(0)-'a'+2.5;
+		this.y=pos.charAt(1)-'1'+0.5;
+                System.out.println(pos+"="+x+" "+y);
 	}
 
 	public int toInteger() throws NotCenterPositionException{
