@@ -33,7 +33,7 @@ public class ArduinoCommunicator {
 		ArduinoCommunicator.readLine = null;
 		ArduinoCommunicator.linetoWrite = null;
 		ArduinoCommunicator.runPythonReader();
-		ArduinoCommunicator.runPythonWriter();
+		//ArduinoCommunicator.runPythonWriter();
 	}
 
 	public static void runPythonWriter() throws IOException {
