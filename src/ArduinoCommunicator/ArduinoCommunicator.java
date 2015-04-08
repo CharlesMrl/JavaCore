@@ -39,14 +39,11 @@ public class ArduinoCommunicator {
 		ArduinoCommunicator.outp = new BufferedWriter(new OutputStreamWriter(pythonProcessWriter.getOutputStream()));
 		Thread t = new Thread(new Runnable() {
 			public void run() {
-				//while (true) {
+				while (true) {
 					if (linetoWrite!=null) {
 						try {
-							//System.out.print("pythonWriter sends :"+linetoWrite);
-							//ArduinoCommunicator.outp.write(linetoWrite+"\n");
-                                                        ArduinoCommunicator.outp.write("init\n"+'\n');
-                                                        //ArduinoCommunicator.outp.flush();
-                                                        ArduinoCommunicator.outp.write("listen 1\n"+'\n');
+							System.out.print("pythonWriter sends :"+linetoWrite);
+							ArduinoCommunicator.outp.write(linetoWrite+'\n');
 							ArduinoCommunicator.outp.flush();
 							System.out.println(" -> OK");
 						} catch (IOException e1) {
@@ -60,7 +57,7 @@ public class ArduinoCommunicator {
 						ArduinoCommunicator.linetoWrite=null;
 					}
 
-				//}
+				}
 			}
 		});
 		t.start();
