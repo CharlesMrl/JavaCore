@@ -121,7 +121,7 @@ public class JavaCore {
                 invalid = true;
 
                 //arduino_output = input.nextLine();
-                System.out.println("Reading ...");
+                //System.out.println("Reading ...");
                 arduino_output = ArduinoCommunicator.read();
                 
                 if (arduino_output != null) {

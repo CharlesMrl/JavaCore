@@ -72,7 +72,9 @@ public class ArduinoCommunicator {
 			public void run() {
 				try {
 					while (true){
+                                            System.out.println("Reading ...");
                                                 ArduinoCommunicator.readLine = ArduinoCommunicator.inp.readLine();
+                                          
 						System.out.println("pythonReader received :"+ArduinoCommunicator.readLine);
 						//System.out.println(readLine);
 						// CALL FUNCTION THAT NEDD TO PROCESS READ DATA HERE INSTEAD
@@ -99,7 +101,7 @@ public class ArduinoCommunicator {
 	public static String read() {
 		String tmp = ArduinoCommunicator.readLine;
 		ArduinoCommunicator.readLine = null;
-		return readLine;
+		return tmp;
 	}
 
 	public static void valid() {
