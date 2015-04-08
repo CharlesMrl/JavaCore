@@ -42,15 +42,17 @@ public class ArduinoCommunicator {
                 while (true) {
                     if (linetoWrite!=null) {
                         try {
-                            System.out.println("pythonWriter sends :"+linetoWrite);
+                            System.out.print("pythonWriter sends :"+linetoWrite);
                             ArduinoCommunicator.outp.write(linetoWrite);
                             ArduinoCommunicator.outp.flush();
-
+                            System.out.println(" -> OK");
                         } catch (IOException e1) {
+                            e1.printStackTrace();
                         }
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                         linetoWrite=null;
                     }
@@ -73,6 +75,7 @@ public class ArduinoCommunicator {
                         //SerialPython.setReadLine("nope");
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
