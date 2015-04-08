@@ -27,7 +27,7 @@ public class ArduinoCommunicator {
 
     public ArduinoCommunicator() throws IOException {
         pyPRBuilder = new ProcessBuilder(cmdReader);
-        pyPRBuilder = new ProcessBuilder(cmdWriter);
+        pyPWBuilder = new ProcessBuilder(cmdWriter);
         readLine = null;
         linetoWrite = null;
         this.runPythonReader();
