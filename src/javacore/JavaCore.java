@@ -23,7 +23,7 @@ import wechesspresso.*;
  * @author Bastien
  */
 public class JavaCore {
-
+    
     public ArduinoCommunicator arduino;
     public Connection con;
     public Game current_game;
@@ -35,7 +35,7 @@ public class JavaCore {
     static void printFEN(String fen) {
         String[] alines = fen.split("/");
         ArrayList<String> lines = new ArrayList();
-
+        
         for (int i = 0; i < alines.length; i++) {
             lines.add(alines[i]);
         }
@@ -50,24 +50,24 @@ public class JavaCore {
                 space = space.concat(".");
                 s = s.replace(String.valueOf(c), space);
             }
-
+            
             s = s.substring(0, 8);
-
+            
             System.out.print(s);
             System.out.println("|" + lig--);
         }
-
+        
         System.out.println("------------");
         System.out.println(" |abcdefgh|");
     }
-
+    
     public JavaCore(int user_id, int game_id) throws SQLException, ClassNotFoundException {
         //login db ECE
         //this.con = ConnectionManager.getConnection();
 
         //login db 192.168.80.17
         this.con = ConnectionManager.getConnectionLocal();
-
+        
         this.user = null;
         this.current_game = null;
         user = Player.findById(String.valueOf(user_id));
@@ -81,7 +81,7 @@ public class JavaCore {
             System.exit(-1);
         }
     }
-
+    
     public void setCurrentGame(int game_id) {
         try {
             current_game = Game.findById(game_id);
@@ -89,7 +89,7 @@ public class JavaCore {
             e.printStackTrace();
         }
     }
-
+    
     public void setUser(int user_id) {
         try {
             user = Player.findById(user_id);
@@ -97,7 +97,7 @@ public class JavaCore {
             e.printStackTrace();
         }
     }
-
+    
     public void loop() throws Exception {
         String mon_coup = null;
         String newFen = null;
@@ -117,47 +117,46 @@ public class JavaCore {
                 arduino.listen("black");
             }
             do {
-                invalid = false;
+                invalid = true;
 
                 //arduino_output = input.nextLine();
                 arduino_output = arduino.read();
                 if (arduino_output != null) {
                     System.out.println("Arduino sent: '" + arduino_output + "'");
                     try {
-
+                        newFen = null;
                         mon_coup = new MoveDecoder().decode(arduino_output);
                         //Verifier que le coup est valide
                         newFen = WeChesspresso.getNewFen(current_game.get("fen"), mon_coup);
+                        invalid = false;
                     } catch (Exception ex) {
                         arduino.invalid();
                         System.out.println("Invalid move !");
                         WeChesspresso.printAllMoves(current_game.get("fen"));
-                        invalid = true;
                         //Logger.getLogger(JavaCore.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } else {
-                    current_game.sync();
-                    if(current_game.myTurn(user.get("id"))){
-                        invalid=false;
-                        
-                    }
                 }
-
-            } while (invalid == true);
-            arduino.valid();
-            printFEN(newFen);
-            //Envoi des infos du coup
-            Move m = Move.make(current_game.get("id"),
-                    user.get("id"),
-                    newFen,
-                    mon_coup.substring(0, 2),
-                    mon_coup.substring(2, 4),
-                    WeChesspresso.getMoveType(current_game.get("fen"), mon_coup),
-                    Move.getTimeStamp());
-            m.print();
-            //affecter le move a la partie en cours
-            current_game.assignNewMove(m);
-            // LOUIS : Verifier si echec et mat
+                
+            } while (invalid && current_game.myTurn(user.get("id")));
+            if (newFen != null) {
+                arduino.valid();
+                printFEN(newFen);
+                //Envoi des infos du coup
+                Move m = Move.make(current_game.get("id"),
+                        user.get("id"),
+                        newFen,
+                        mon_coup.substring(0, 2),
+                        mon_coup.substring(2, 4),
+                        WeChesspresso.getMoveType(current_game.get("fen"), mon_coup),
+                        Move.getTimeStamp());
+                m.print();
+                //affecter le move a la partie en cours
+                current_game.assignNewMove(m);
+                // LOUIS : Verifier si echec et mat
+            } else {
+                current_game.sync();
+                printFEN(current_game.get("fen"));
+            }
             if (current_game.isCheck()) {
                 System.out.println("CHECK!");
             }
@@ -205,5 +204,5 @@ public class JavaCore {
             }
         }
     }
-
+    
 }
