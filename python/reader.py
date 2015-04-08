@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-import serial,time 
+import serial,time
+sleep 5
 ser = serial.Serial('/dev/ttyACM1', 9600)
 time.sleep(1)
 #sio = io.TextIOWrapper(io.BufferedRWPair(ser, ser))
