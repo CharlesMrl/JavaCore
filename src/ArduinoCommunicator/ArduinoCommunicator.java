@@ -18,8 +18,8 @@ public class ArduinoCommunicator {
     private Process pythonProcessWriter;
     private static BufferedReader inp;
     private static BufferedWriter outp;
-    private static final String cmdWriter = "/home/pi/Desktop/wechess/JavaCore/IPCPython/writer.py";
-    private static final String cmdReader = "/home/pi/Desktop/wechess/JavaCore/IPCPython/reader.py";
+    private static final String cmdWriter = "/home/pi/Desktop/wechess/JavaCore/python/writer.py";
+    private static final String cmdReader = "/home/pi/Desktop/wechess/JavaCore/python/reader.py";
     private static String readLine;
     private static String linetoWrite;
     private static ProcessBuilder pyPRBuilder;
