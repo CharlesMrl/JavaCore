@@ -2,7 +2,7 @@
 # -*- coding: latin-1 -*-
 
 import serial,time 
-ser = serial.Serial('/dev/ttyACM1', 9600, timeout=1)
+ser = serial.Serial('/dev/ttyACM1', 9600)
 time.sleep(1)
 sio = io.TextIOWrapper(io.BufferedRWPair(ser, ser))
 time.sleep(1)
