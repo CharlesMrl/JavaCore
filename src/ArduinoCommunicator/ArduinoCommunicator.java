@@ -88,24 +88,24 @@ public class ArduinoCommunicator {
     }
 
     public void valid() {
-        send("valid\n");
+        send("valid");
     }
 
     public void invalid() {
-        send("invalid\n");
+        send("invalid");
     }
 
     public void sleep() {
-        send("sleep\n");
+        send("sleep");
     }
 
     public void listen(String player) {
         switch (player) {
             case "white":
-                send("listen 1\n");
+                send("listen 1");
                 break;
             case "black":
-                send("listen 2\n");
+                send("listen 2");
                 break;
         }
     }

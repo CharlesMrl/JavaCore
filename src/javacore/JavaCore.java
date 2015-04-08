@@ -64,10 +64,10 @@ public class JavaCore {
     public JavaCore(int user_id, int game_id) throws SQLException, ClassNotFoundException {
         //login db ECE
         //this.con = ConnectionManager.getConnection();
-        
+
         //login db 192.168.80.17
         this.con = ConnectionManager.getConnectionLocal();
-        
+
         this.user = null;
         this.current_game = null;
         user = Player.findById(String.valueOf(user_id));
@@ -118,22 +118,31 @@ public class JavaCore {
             }
             do {
                 invalid = false;
-                
+
                 //arduino_output = input.nextLine();
                 arduino_output = arduino.read();
-                System.out.println("Arduino sent: '" + arduino_output + "'");
-                try {
-               
-                    mon_coup = new MoveDecoder().decode(arduino_output);
-                    //Verifier que le coup est valide
-                    newFen = WeChesspresso.getNewFen(current_game.get("fen"), mon_coup);
-                } catch (Exception ex) {
-                    arduino.invalid();
-                    System.out.println("Invalid move !");
-                    WeChesspresso.printAllMoves(current_game.get("fen"));
-                    invalid = true;
-                    //Logger.getLogger(JavaCore.class.getName()).log(Level.SEVERE, null, ex);
+                if (arduino_output != null) {
+                    System.out.println("Arduino sent: '" + arduino_output + "'");
+                    try {
+
+                        mon_coup = new MoveDecoder().decode(arduino_output);
+                        //Verifier que le coup est valide
+                        newFen = WeChesspresso.getNewFen(current_game.get("fen"), mon_coup);
+                    } catch (Exception ex) {
+                        arduino.invalid();
+                        System.out.println("Invalid move !");
+                        WeChesspresso.printAllMoves(current_game.get("fen"));
+                        invalid = true;
+                        //Logger.getLogger(JavaCore.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    current_game.sync();
+                    if(current_game.myTurn(user.get("id"))){
+                        invalid=false;
+                        
+                    }
                 }
+
             } while (invalid == true);
             arduino.valid();
             printFEN(newFen);
