@@ -42,6 +42,7 @@ public class ArduinoCommunicator {
                 while (true) {
                     if (linetoWrite!=null) {
                         try {
+                            System.out.println("pythonWriter sends :"+linetoWrite);
                             ArduinoCommunicator.outp.write(linetoWrite);
                             ArduinoCommunicator.outp.flush();
 
@@ -66,6 +67,7 @@ public class ArduinoCommunicator {
             public void run() {
                 try {
                     while ((readLine = ArduinoCommunicator.inp.readLine()) != null) {
+                        System.out.println("pythonReader received :"+readLine);
 						//System.out.println(readLine);
                         // CALL FUNCTION THAT NEDD TO PROCESS READ DATA HERE INSTEAD
                         //SerialPython.setReadLine("nope");
