@@ -11,3 +11,4 @@ while 1 :
 	#s=sio.readline()
 	print(s)
 	print('\n')
+	ser.flush()
