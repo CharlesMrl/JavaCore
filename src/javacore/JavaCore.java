@@ -108,7 +108,7 @@ public class JavaCore {
             //if (true) {
             current_game.sync();
             printFEN(current_game.get("fen"));
-            //ArduinoCommunicator.init();
+            ArduinoCommunicator.init();
             // Attendre la detection d'un coup
             if (current_game.get("uidw").equals(user.get("id"))) {
                 System.out.println("Your turn, you play WHITE : ");
