@@ -26,6 +26,7 @@ public class MotorController {
     
     static public void run(List<Path> path_list){
         String cmd = new String();
+        String home = "0.5 0.5";
         for (Path path : path_list) {
             cmd = "";
             int size = path.positions.size();
@@ -34,8 +35,8 @@ public class MotorController {
                 cmd += " ";
                 if(i==0) cmd += "x x ";
             }
-            cmd += "y y ";
-            //System.out.println("Sending cmd : "+cmd);
+            cmd += "y y "+home;
+            System.out.println("Sending cmd : "+cmd);
             run(cmd);
         }
         
@@ -61,16 +62,47 @@ public class MotorController {
     }
     
     public static void main(String[] args) {
-        String fen = Game.START_FEN;
+        //String fen = Game.START_FEN;
+        String[] fen = {"r1q1kn2/1p4p1/8/P7/2b5/p1B1P3/5P2/1NQ1K2R w Kq - 0 0",
+                        "r1q1kn2/1p4pR/8/P7/2b5/p1B1P3/5P2/1NQ1K3 w Kq - 0 0",
+                        "r1q1kn2/1p5R/8/P5p1/2b5/p1B1P3/5P2/1NQ1K3 w Kq - 0 0",
+                        "r1q1kn2/1p5R/8/P5p1/2b5/p1B1PP2/8/1NQ1K3 w Kq - 0 0",
+                        "r1q1k3/1p5R/4n3/P5p1/2b5/p1B1PP2/8/1NQ1K3 w Kq - 0 0",
+                        "r1q1k3/1p5R/4n3/P5p1/2b5/p1B1PP2/3K4/1NQ5 w Kq - 0 0",
+                        "r3k3/1p5R/4n3/P1q3p1/2b5/p1B1PP2/3K4/1NQ5 w Kq - 0 0",
+                        "r3k3/1p5R/4n3/P1q3p1/2b5/Q1B1PP2/3K4/1N6 w Kq - 0 0"
+        };
+        /*
+        1) h1 h7 : r1q1kn2/1p4pR/8/P7/2b5/p1B1P3/5P2/1NQ1K3 w Kq - 0 0
+        2) g7 g5 : r1q1kn2/1p5R/8/P5p1/2b5/p1B1P3/5P2/1NQ1K3 w Kq - 0 0
+        3) g2 g3 : r1q1kn2/1p5R/8/P5p1/2b5/p1B1PP2/8/1NQ1K3 w Kq - 0 0
+        4) g8 f6 : r1q1k3/1p5R/4n3/P5p1/2b5/p1B1PP2/8/1NQ1K3 w Kq - 0 0
+        5) e1 d2 : r1q1k3/1p5R/4n3/P5p1/2b5/p1B1PP2/3K4/1NQ5 w Kq - 0 0
+        6) c8 c5 : r3k3/1p5R/4n3/P1q3p1/2b5/p1B1PP2/3K4/1NQ5 w Kq - 0 0
+        7) c1 a3 : r3k3/1p5R/4n3/P1q3p1/2b5/Q1B1PP2/3K4/1N6 w Kq - 0 0
+        */
         
         List<Path> lpath = new ArrayList<>();
         
-        
-        Path p = Dijkstra.getShortestPath(new Position("b1"), new Position("a3"), fen);
-        
+        Path p = Dijkstra.getShortestPath(new Position("e1"), new Position("e4"), Game.START_FEN);
         lpath.add(p);
-        p = Dijkstra.getShortestPath(new Position("a2"), new Position("a4"), fen);
+        //System.out.println(p.positions.toString());
+        /*
+        p = Dijkstra.getShortestPath(new Position("g7"), new Position("g5"), fen[1]);
         lpath.add(p);
+        p = Dijkstra.getShortestPath(new Position("g2"), new Position("g3"), fen[2]);
+        lpath.add(p);
+        p = Dijkstra.getShortestPath(new Position("g8"), new Position("f6"), fen[3]);
+        lpath.add(p);
+        p = Dijkstra.getShortestPath(new Position("e1"), new Position("d2"), fen[4]);
+        lpath.add(p);
+        p = Dijkstra.getShortestPath(new Position("c8"), new Position("c5"), fen[5]);
+        lpath.add(p);
+        p = Dijkstra.getShortestPath(new Position("c1"), new Position("a3"), fen[6]);
+        lpath.add(p);
+                */
+        //p = Dijkstra.getShortestPath(new Position("a2"), new Position("a4"), fen);
+        //lpath.add(p);
         run(lpath);
     }
 }

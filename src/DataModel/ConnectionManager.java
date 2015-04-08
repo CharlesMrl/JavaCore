@@ -63,7 +63,7 @@ public class ConnectionManager {
     
     public static Connection getConnectionLocal() throws SQLException, ClassNotFoundException{
         init_table_map();
-        String l_url = "jdbc:mysql://localhost:8889/chessdb";
+        String l_url = "jdbc:mysql://192.168.0.7:8889/chessdb";
         String l_username = "wechess";
         String l_password = "wechess";
         
@@ -81,7 +81,7 @@ public class ConnectionManager {
             System.out.println("Driver not found.");
             throw ex;
         }
-        System.out.println("MySQL connexion successful : " + url);
+        System.out.println("MySQL connexion successful : " + l_url);
         return con;
     }
     

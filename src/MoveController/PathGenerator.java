@@ -32,7 +32,6 @@ public class PathGenerator {
             
             /*
             TODO : Determiner la Position ou on range la piece capturée
-            
             */
             
             Position pos_rangement = new Position(0.5,0.5);

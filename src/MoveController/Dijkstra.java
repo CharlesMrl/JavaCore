@@ -342,7 +342,7 @@ public class Dijkstra{
                 for(int i = fullBoard.size() - 1; i >= 0; i--){
 			for(int j = 0; j < fullBoard.get(0).size(); j++){
 				if(!fullBoard.get(i).get(j).equals('.')){
-					System.out.println(j+" "+(fullBoard.size()-i-1+" - case #"+(j+12*(fullBoard.size()-i-1))));
+					//System.out.println(j+" "+(fullBoard.size()-i-1+" - case #"+(j+12*(fullBoard.size()-i-1))));
 					liste.add(j+12*(fullBoard.size()-i-1));
 				}
 			}
@@ -506,7 +506,6 @@ public class Dijkstra{
 		path = correctPath(path);
 		System.out.println("\n"+path.toString());
 		
-
 
 		/*
 		  TESTS
