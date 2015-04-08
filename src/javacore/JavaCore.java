@@ -74,12 +74,7 @@ public class JavaCore {
         //selection partie
         current_game = Game.findById(game_id);
         current_game.print();
-        try {
-            this.arduino = new ArduinoCommunicator();
-        } catch (IOException ex) {
-            System.out.println("Echec Initialisation Arduino! Branche le?");
-            System.exit(-1);
-        }
+        
     }
     
     public void setCurrentGame(int game_id) {
@@ -102,12 +97,18 @@ public class JavaCore {
         String mon_coup = null;
         String newFen = null;
         boolean invalid;
+        try {
+            this.arduino = new ArduinoCommunicator();
+        } catch (IOException ex) {
+            System.out.println("Echec Initialisation Arduino! Branche le?");
+            System.exit(-1);
+        }
         //Si mon tour de jouer
         if (current_game.myTurn(user.get("id"))) {
             //if (true) {
             current_game.sync();
             printFEN(current_game.get("fen"));
-            ArduinoCommunicator.init();
+            //ArduinoCommunicator.init();
             // Attendre la detection d'un coup
             if (current_game.get("uidw").equals(user.get("id"))) {
                 System.out.println("Your turn, you play WHITE : ");
