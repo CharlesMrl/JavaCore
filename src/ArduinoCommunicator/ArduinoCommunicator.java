@@ -43,7 +43,8 @@ public class ArduinoCommunicator {
 					if (ArduinoCommunicator.linetoWrite!=null) {
 						try {
 							System.out.print("pythonWriter sends :"+ArduinoCommunicator.linetoWrite);
-							ArduinoCommunicator.outp.write(ArduinoCommunicator.linetoWrite+"\n");
+							ArduinoCommunicator.outp.write(ArduinoCommunicator.linetoWrite);
+                                                        ArduinoCommunicator.outp.newLine();
 							ArduinoCommunicator.outp.flush();
 							System.out.println(" -> OK");
 						} catch (IOException e1) {
