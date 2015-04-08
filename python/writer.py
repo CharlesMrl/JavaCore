@@ -3,12 +3,12 @@
 
 import sys, serial, time
 
-ser = serial.Serial('/dev/ttyACM0', 9600)
+ser = serial.Serial('/dev/ttyACM1', 9600)
 time.sleep(1)
 logfile = open("writer.log", "w")
 s = sys.stdin.readline().strip()
 
 while 1:
 	ser.write(s + '$')
-	logfile.write("{}".s."  Time: ".time.time())
+	logfile.write("{}".s)
 	s = sys.stdin.readline().strip()
