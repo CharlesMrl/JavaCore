@@ -14,8 +14,8 @@ import java.io.OutputStreamWriter;
 
 public class ArduinoCommunicator {
 
-    private Process pythonProcessReader;
-    private Process pythonProcessWriter;
+    private static Process pythonProcessReader;
+    private static Process pythonProcessWriter;
     private static BufferedReader inp;
     private static BufferedWriter outp;
     private static final String cmdWriter = "/home/pi/Desktop/wechess/JavaCore/python/writer.py";
@@ -35,7 +35,7 @@ public class ArduinoCommunicator {
     }
 
     public static void runPythonWriter() throws IOException {
-        this.pythonProcessWriter = this.pyPWBuilder.start();
+        pythonProcessWriter = pyPWBuilder.start();
         outp = new BufferedWriter(new OutputStreamWriter(pythonProcessWriter.getOutputStream()));
         Thread t = new Thread(new Runnable() {
             public void run() {
@@ -64,7 +64,7 @@ public class ArduinoCommunicator {
     }
 
     public void runPythonReader() throws IOException {
-        this.pythonProcessReader = this.pyPRBuilder.start();
+        pythonProcessReader = pyPRBuilder.start();
         inp = new BufferedReader(new InputStreamReader(pythonProcessReader.getInputStream()));
         Thread t = new Thread(new Runnable() {
             public void run() {
