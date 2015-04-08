@@ -43,7 +43,7 @@ public class ArduinoCommunicator {
                     if (linetoWrite!=null) {
                         try {
                             System.out.print("pythonWriter sends :"+linetoWrite);
-                            ArduinoCommunicator.outp.write(linetoWrite);
+                            ArduinoCommunicator.outp.write(linetoWrite+"\n");
                             ArduinoCommunicator.outp.flush();
                             System.out.println(" -> OK");
                         } catch (IOException e1) {
@@ -56,6 +56,7 @@ public class ArduinoCommunicator {
                         }
                         linetoWrite=null;
                     }
+                    
                 }
             }
         });
@@ -77,6 +78,7 @@ public class ArduinoCommunicator {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                System.out.println("Reader is dead");
             }
         });
         t.start();
@@ -120,7 +122,7 @@ public class ArduinoCommunicator {
         try {
             Thread.sleep(500);
         } catch (InterruptedException ex) {
-           
+           ex.printStackTrace();
         }
     }
 
