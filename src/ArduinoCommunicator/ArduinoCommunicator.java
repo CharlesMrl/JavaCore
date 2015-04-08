@@ -34,7 +34,7 @@ public class ArduinoCommunicator {
         this.runPythonWriter();
     }
 
-    public void runPythonWriter() throws IOException {
+    public static void runPythonWriter() throws IOException {
         this.pythonProcessWriter = this.pyPWBuilder.start();
         outp = new BufferedWriter(new OutputStreamWriter(pythonProcessWriter.getOutputStream()));
         Thread t = new Thread(new Runnable() {

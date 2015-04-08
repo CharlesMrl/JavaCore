@@ -7,6 +7,6 @@ time.sleep(1)
 while 1 :
 	s=ser.readline()
 	print(s)
-	logfile = open("reader.log", "w")
+	logfile = open("reader.log", "a")
 	logfile.write(s)
 	logfile.close()

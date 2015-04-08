@@ -9,7 +9,7 @@ s = sys.stdin.readline().strip()
 
 while 1:
 	ser.write(s + '$')
-	logfile = open("writer.log", "w")
+	logfile = open("writer.log", "a")
 	logfile.write(s)
 	logfile.close()
 	s = sys.stdin.readline().strip()
