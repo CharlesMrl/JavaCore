@@ -9,3 +9,4 @@ s = sys.stdin.readline().strip()
 
 #while 1:
 ser.write(s + '$')
+ser.flush()
