@@ -42,8 +42,8 @@ public class ArduinoCommunicator {
 				while (true) {
 					if (ArduinoCommunicator.linetoWrite!=null) {
 						try {
-							System.out.print("pythonWriter sends :"+linetoWrite);
-							ArduinoCommunicator.outp.write(linetoWrite+'\n');
+							System.out.print("pythonWriter sends :"+ArduinoCommunicator.linetoWrite);
+							ArduinoCommunicator.outp.write(ArduinoCommunicator.linetoWrite+'\n');
 							ArduinoCommunicator.outp.flush();
 							System.out.println(" -> OK");
 						} catch (IOException e1) {
