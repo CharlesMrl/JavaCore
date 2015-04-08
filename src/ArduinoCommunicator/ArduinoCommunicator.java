@@ -26,17 +26,17 @@ public class ArduinoCommunicator {
 	private static ProcessBuilder pyPWBuilder;
 
 	public ArduinoCommunicator() throws IOException {
-		pyPRBuilder = new ProcessBuilder(cmdReader);
-		pyPWBuilder = new ProcessBuilder(cmdWriter);
-		readLine = null;
-		linetoWrite = null;
+		ArduinoCommunicator.pyPRBuilder = new ProcessBuilder(cmdReader);
+		ArduinoCommunicator.pyPWBuilder = new ProcessBuilder(cmdWriter);
+		ArduinoCommunicator.readLine = null;
+		ArduinoCommunicator.linetoWrite = null;
 		ArduinoCommunicator.runPythonReader();
 		ArduinoCommunicator.runPythonWriter();
 	}
 
 	public static void runPythonWriter() throws IOException {
-		pythonProcessWriter = pyPWBuilder.start();
-		outp = new BufferedWriter(new OutputStreamWriter(pythonProcessWriter.getOutputStream()));
+		ArduinoCommunicator.pythonProcessWriter = pyPWBuilder.start();
+		ArduinoCommunicator.outp = new BufferedWriter(new OutputStreamWriter(pythonProcessWriter.getOutputStream()));
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				while (true) {
@@ -54,7 +54,7 @@ public class ArduinoCommunicator {
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						linetoWrite=null;
+						ArduinoCommunicator.linetoWrite=null;
 					}
 
 				}
@@ -64,8 +64,8 @@ public class ArduinoCommunicator {
 	}
 
 	public static void runPythonReader() throws IOException {
-		pythonProcessReader = pyPRBuilder.start();
-		inp = new BufferedReader(new InputStreamReader(pythonProcessReader.getInputStream()));
+		ArduinoCommunicator.pythonProcessReader = ArduinoCommunicator.pyPRBuilder.start();
+		ArduinoCommunicator.inp = new BufferedReader(new InputStreamReader(pythonProcessReader.getInputStream()));
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -85,12 +85,12 @@ public class ArduinoCommunicator {
 	}
 
 	public static void send(String m) {
-		linetoWrite = m;
+		ArduinoCommunicator.linetoWrite = m;
 	}
 
 	public static String read() {
-		String tmp = readLine;
-		readLine = null;
+		String tmp = ArduinoCommunicator.readLine;
+		ArduinoCommunicator.readLine = null;
 		return readLine;
 	}
 
