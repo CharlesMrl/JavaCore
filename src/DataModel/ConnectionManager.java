@@ -63,7 +63,7 @@ public class ConnectionManager {
     
     public static Connection getConnectionLocal() throws SQLException, ClassNotFoundException{
         init_table_map();
-        String l_url = "jdbc:mysql://192.168.0.7:8889/chessdb";
+        String l_url = "jdbc:mysql://192.168.0.31:3306/chessdb";
         String l_username = "wechess";
         String l_password = "wechess";
         

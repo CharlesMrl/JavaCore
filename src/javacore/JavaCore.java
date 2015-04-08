@@ -9,6 +9,7 @@ import ArduinoCommunicator.*;
 import DataModel.*;
 import MoveController.*;
 import chesspresso.move.IllegalMoveException;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,8 +74,9 @@ public class JavaCore {
         //selection partie
         current_game = Game.findById(game_id);
         current_game.print();
-        this.arduino = new ArduinoCommunicator();
-        if (!this.arduino.initialize()) {
+        try {
+            this.arduino = new ArduinoCommunicator();
+        } catch (IOException ex) {
             System.out.println("Echec Initialisation Arduino! Branche le?");
             System.exit(-1);
         }
@@ -122,7 +124,7 @@ public class JavaCore {
                 System.out.println("Arduino sent: '" + arduino_output + "'");
                 try {
                
-                    mon_coup = arduino.decoder.decode(arduino_output);
+                    mon_coup = new MoveDecoder().decode(arduino_output);
                     //Verifier que le coup est valide
                     newFen = WeChesspresso.getNewFen(current_game.get("fen"), mon_coup);
                 } catch (Exception ex) {
