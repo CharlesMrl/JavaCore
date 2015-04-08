@@ -13,8 +13,8 @@ public class SerialPython {
     private Process pythonProcessWriter;
     private static BufferedReader inp;
     private static BufferedWriter outp;
-    private static final String cmdWriter = "/home/louis/workspace/IPCPython/writer.py";
-    private static final String cmdReader = "/home/louis/workspace/IPCPython/reader.py";
+    private static final String cmdWriter = "/home/pi/Desktop/wechess/JavaCore/IPCPython/writer.py";
+    private static final String cmdReader = "/home/pi/Desktop/wechess/JavaCore/IPCPython/reader.py";
     private static String readLine;
     private static String linetoWrite;
     private static ProcessBuilder pyPRBuilder;
@@ -23,8 +23,8 @@ public class SerialPython {
     public SerialPython() throws IOException {
         pyPRBuilder = new ProcessBuilder(cmdReader);
         pyPRBuilder = new ProcessBuilder(cmdWriter);
-        readLine = "nope";
-        linetoWrite = "nope";
+        readLine = null;
+        linetoWrite = null;
         this.runPythonReader();
         this.runPythonWriter();
     }
