@@ -138,6 +138,7 @@ public class JavaCore {
                 }
                 
             } while (invalid && current_game.myTurn(user.get("id")));
+            
             if (newFen != null) {
                 arduino.valid();
                 printFEN(newFen);

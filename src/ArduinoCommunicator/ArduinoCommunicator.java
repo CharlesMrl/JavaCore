@@ -77,7 +77,7 @@ public class ArduinoCommunicator {
         t.start();
     }
 
-    public void send(String m) {
+    public static void send(String m) {
         linetoWrite = m;
     }
 
@@ -87,19 +87,19 @@ public class ArduinoCommunicator {
         return readLine;
     }
 
-    public void valid() {
+    public static void valid() {
         send("valid");
     }
 
-    public void invalid() {
+    public static void invalid() {
         send("invalid");
     }
 
-    public void sleep() {
+    public static void sleep() {
         send("sleep");
     }
 
-    public void listen(String player) {
+    public static void listen(String player) {
         switch (player) {
             case "white":
                 send("listen 1");
@@ -110,8 +110,8 @@ public class ArduinoCommunicator {
         }
     }
 
-    public void init() {
-        send("init\n");
+    public static void init() {
+        send("init");
         try {
             Thread.sleep(500);
         } catch (InterruptedException ex) {
@@ -129,7 +129,12 @@ public class ArduinoCommunicator {
                 }
             
             sp.listen("white");
-            String out = sp.read();
+            String out;
+            do{
+                out = sp.read();
+            }while(out==null);
+            
+            
             System.out.println("Received: "+out);
             sp.valid();
         }
