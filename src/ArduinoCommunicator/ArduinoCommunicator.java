@@ -35,8 +35,8 @@ public class ArduinoCommunicator {
 	}
 
 	public static void runPythonWriter() throws IOException {
-		ArduinoCommunicator.pythonProcessWriter = pyPWBuilder.start();
-		ArduinoCommunicator.outp = new BufferedWriter(new OutputStreamWriter(pythonProcessWriter.getOutputStream()));
+		ArduinoCommunicator.pythonProcessWriter = ArduinoCommunicator.pyPWBuilder.start();
+		ArduinoCommunicator.outp = new BufferedWriter(new OutputStreamWriter(ArduinoCommunicator.pythonProcessWriter.getOutputStream()));
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				while (true) {
@@ -65,12 +65,12 @@ public class ArduinoCommunicator {
 
 	public static void runPythonReader() throws IOException {
 		ArduinoCommunicator.pythonProcessReader = ArduinoCommunicator.pyPRBuilder.start();
-		ArduinoCommunicator.inp = new BufferedReader(new InputStreamReader(pythonProcessReader.getInputStream()));
+		ArduinoCommunicator.inp = new BufferedReader(new InputStreamReader(ArduinoCommunicator.pythonProcessReader.getInputStream()));
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				try {
 					while ((ArduinoCommunicator.readLine = ArduinoCommunicator.inp.readLine()) != null) {
-						System.out.println("pythonReader received :"+readLine);
+						System.out.println("pythonReader received :"+ArduinoCommunicator.readLine);
 						//System.out.println(readLine);
 						// CALL FUNCTION THAT NEDD TO PROCESS READ DATA HERE INSTEAD
 						//SerialPython.setReadLine("nope");
