@@ -71,7 +71,8 @@ public class ArduinoCommunicator {
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				try {
-					while ((ArduinoCommunicator.readLine = ArduinoCommunicator.inp.readLine()) != null) {
+					while (true){
+                                                ArduinoCommunicator.readLine = ArduinoCommunicator.inp.readLine();
 						System.out.println("pythonReader received :"+ArduinoCommunicator.readLine);
 						//System.out.println(readLine);
 						// CALL FUNCTION THAT NEDD TO PROCESS READ DATA HERE INSTEAD
