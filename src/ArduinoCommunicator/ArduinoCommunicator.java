@@ -21,7 +21,7 @@ public class ArduinoCommunicator {
 	private static final String cmdWriter = "/home/pi/Desktop/wechess/JavaCore/python/writer.py";
 	private static final String cmdReader = "/home/pi/Desktop/wechess/JavaCore/python/reader.py";
 	private static String readLine;
-	private static String linetoWrite;
+	private static String linetoWrite = null;
 	private static ProcessBuilder pyPRBuilder;
 	private static ProcessBuilder pyPWBuilder;
 
@@ -40,7 +40,7 @@ public class ArduinoCommunicator {
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				while (true) {
-					if (linetoWrite!=null) {
+					if (ArduinoCommunicator.linetoWrite!=null) {
 						try {
 							System.out.print("pythonWriter sends :"+linetoWrite);
 							ArduinoCommunicator.outp.write(linetoWrite+'\n');
@@ -69,7 +69,7 @@ public class ArduinoCommunicator {
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				try {
-					while ((readLine = ArduinoCommunicator.inp.readLine()) != null) {
+					while ((ArduinoCommunicator.readLine = ArduinoCommunicator.inp.readLine()) != null) {
 						System.out.println("pythonReader received :"+readLine);
 						//System.out.println(readLine);
 						// CALL FUNCTION THAT NEDD TO PROCESS READ DATA HERE INSTEAD
