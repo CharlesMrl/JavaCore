@@ -6,7 +6,7 @@ ser = serial.Serial('/dev/ttyACM1', 9600)
 time.sleep(1)
 while 1 :
 	s=ser.readline()
-	print(s)
+	print(s+'\n')
 	logfile = open("reader.log", "a")
 	logfile.write(s)
 	logfile.close()
