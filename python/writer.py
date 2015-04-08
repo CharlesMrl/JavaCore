@@ -5,10 +5,11 @@ import sys, serial, time
 
 ser = serial.Serial('/dev/ttyACM1', 9600)
 time.sleep(1)
-logfile = open("writer.log", "w")
 s = sys.stdin.readline().strip()
 
 while 1:
 	ser.write(s + '$')
-	logfile.write("{}".s)
+	logfile = open("writer.log", "w")
+	logfile.write(s)
+	logfile.close()
 	s = sys.stdin.readline().strip()
