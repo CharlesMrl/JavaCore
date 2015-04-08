@@ -11,6 +11,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ArduinoCommunicator {
 
@@ -39,9 +41,8 @@ public class ArduinoCommunicator {
 		ArduinoCommunicator.outp = new BufferedWriter(new OutputStreamWriter(ArduinoCommunicator.pythonProcessWriter.getOutputStream()));
 		Thread t = new Thread(new Runnable() {
 			public void run() {
-				while (true) {
-					if (ArduinoCommunicator.linetoWrite!=null) {
-						try {
+				//while (true) {
+					try {
 							System.out.print("pythonWriter sends :"+ArduinoCommunicator.linetoWrite);
 							ArduinoCommunicator.outp.write(ArduinoCommunicator.linetoWrite);
                                                         ArduinoCommunicator.outp.newLine();
@@ -55,11 +56,11 @@ public class ArduinoCommunicator {
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						ArduinoCommunicator.linetoWrite=null;
-					}
+						//ArduinoCommunicator.linetoWrite=null;
+					
 
 				}
-			}
+			//}
 		});
 		t.start();
 	}
@@ -87,6 +88,11 @@ public class ArduinoCommunicator {
 
 	public static void send(String m) {
 		ArduinoCommunicator.linetoWrite = m;
+            try {
+                ArduinoCommunicator.runPythonWriter();
+            } catch (IOException ex) {
+                Logger.getLogger(ArduinoCommunicator.class.getName()).log(Level.SEVERE, null, ex);
+            }
 	}
 
 	public static String read() {
