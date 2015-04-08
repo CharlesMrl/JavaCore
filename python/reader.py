@@ -4,5 +4,8 @@
 import serial,time 
 ser = serial.Serial('/dev/ttyACM0', 9600)
 time.sleep(1)
+logfile = open("reader.log", "w")
 while 1 :
-	print(ser.readline())
+	s=ser.readline()
+	print(s)
+	logfile.write("{}".s."  Time: ".time.time())
