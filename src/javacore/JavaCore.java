@@ -140,7 +140,7 @@ public class JavaCore {
                     }
                 }
                 
-            } while (invalid && current_game.myTurn(user.get("id")));
+            } while (invalid );//&& current_game.myTurn(user.get("id")));
             
             if (newFen != null) {
                 ArduinoCommunicator.valid();

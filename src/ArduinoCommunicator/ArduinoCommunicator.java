@@ -72,10 +72,10 @@ public class ArduinoCommunicator {
 			public void run() {
 				try {
 					while (true){
-                                            System.out.println("Reading ...");
+                                            //System.out.println("Reading ...");
                                                 ArduinoCommunicator.readLine = ArduinoCommunicator.inp.readLine();
-                                          
-						System.out.println("pythonReader received :"+ArduinoCommunicator.readLine);
+                                                if(readLine==null) continue;
+                                                else System.out.println("pythonReader received :"+ArduinoCommunicator.readLine);
 						//System.out.println(readLine);
 						// CALL FUNCTION THAT NEDD TO PROCESS READ DATA HERE INSTEAD
 						//SerialPython.setReadLine("nope");
