@@ -2,7 +2,7 @@
 # -*- coding: latin-1 -*-
 
 import serial,time
-sleep 5
+time.sleep(5)
 ser = serial.Serial('/dev/ttyACM1', 9600)
 time.sleep(1)
 #sio = io.TextIOWrapper(io.BufferedRWPair(ser, ser))
@@ -11,3 +11,4 @@ while 1 :
 	#s=sio.readline()
 	print(s)
 	print('\n')
+	ser.flush()
