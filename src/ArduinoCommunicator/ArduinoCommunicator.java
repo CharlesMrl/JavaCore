@@ -94,6 +94,11 @@ public class ArduinoCommunicator {
 		ArduinoCommunicator.linetoWrite = m;
             try {
                 ArduinoCommunicator.runPythonWriter();
+                try {
+			Thread.sleep(2000);
+		} catch (InterruptedException ex) {
+			ex.printStackTrace();
+		}
             } catch (IOException ex) {
                 Logger.getLogger(ArduinoCommunicator.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -130,11 +135,7 @@ public class ArduinoCommunicator {
 
 	public static void init() {
 		send("init");
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException ex) {
-			ex.printStackTrace();
-		}
+		
 	}
 
 	public static void main(String[] args) throws IOException {

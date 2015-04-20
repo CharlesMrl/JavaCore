@@ -8,11 +8,9 @@ package javacore;
 import ArduinoCommunicator.*;
 import DataModel.*;
 import MoveController.*;
-import chesspresso.move.IllegalMoveException;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -97,32 +95,32 @@ public class JavaCore {
         String mon_coup = null;
         String newFen = null;
         boolean invalid;
+        /*
         try {
             this.arduino = new ArduinoCommunicator();
         } catch (IOException ex) {
             System.out.println("Echec Initialisation Arduino! Branche le?");
             System.exit(-1);
-        }
+        }*/
         //Si mon tour de jouer
         if (current_game.myTurn(user.get("id"))) {
             //if (true) {
-            current_game.sync();
             printFEN(current_game.get("fen"));
-            ArduinoCommunicator.init();
+            //ArduinoCommunicator.init();
             // Attendre la detection d'un coup
             if (current_game.get("uidw").equals(user.get("id"))) {
                 System.out.println("Your turn, you play WHITE : ");
-                ArduinoCommunicator.listen("white");
+                //ArduinoCommunicator.listen("white");
             } else {
                 System.out.println("Your turn, you play BLACK : ");
-                ArduinoCommunicator.listen("black");
+                //ArduinoCommunicator.listen("black");
             }
             do {
                 invalid = true;
 
-                //arduino_output = input.nextLine();
+                arduino_output = input.nextLine();
                 //System.out.println("Reading ...");
-                arduino_output = ArduinoCommunicator.read();
+                //arduino_output = ArduinoCommunicator.read();
                 
                 if (arduino_output != null) {
                     System.out.println("Arduino sent: '" + arduino_output + "'");
@@ -133,9 +131,9 @@ public class JavaCore {
                         newFen = WeChesspresso.getNewFen(current_game.get("fen"), mon_coup);
                         invalid = false;
                     } catch (Exception ex) {
-                        ArduinoCommunicator.invalid();
+                        //ArduinoCommunicator.invalid();
                         System.out.println("Invalid move !");
-                        WeChesspresso.printAllMoves(current_game.get("fen"));
+                        WeChesspresso.printAllMovesVerbose(current_game.get("fen"));
                         //Logger.getLogger(JavaCore.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -143,7 +141,7 @@ public class JavaCore {
             } while (invalid );//&& current_game.myTurn(user.get("id")));
             
             if (newFen != null) {
-                ArduinoCommunicator.valid();
+                //ArduinoCommunicator.valid();
                 printFEN(newFen);
                 //Envoi des infos du coup
                 Move m = Move.make(current_game.get("id"),
@@ -173,7 +171,6 @@ public class JavaCore {
         else {
             //Attendre un nouveau coup
             System.out.print("Waiting for the opponent move...");
-            current_game.sync();
             while (!current_game.myTurn(user.get("id"))) {
                 try {
                     Thread.sleep(1000);
@@ -181,10 +178,9 @@ public class JavaCore {
                     Logger.getLogger(JavaCore.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            current_game.sync();
             //Effectuer deplacements du coup
             Move m = Move.getLastFromGame(current_game);
-            System.out.print("Move received : ");
+            System.out.print(" Move received : ");
             m.print();
 
             /* Code de déplacement des moteurs
@@ -195,7 +191,7 @@ public class JavaCore {
              ArrayList<Path> path_list = PathGenerator.getPathList(m, current_game.get("fen"));
              MotorController.run(path_list);
              */
-            ArrayList<Path> path_list = PathGenerator.getPathList(m, current_game.get("fen"));
+            ArrayList<Path> path_list = PathGenerator.getPathList(m, current_game.getPreviousFen());
             MotorController.run(path_list);
             //Si echec
             if (current_game.isCheck()) {

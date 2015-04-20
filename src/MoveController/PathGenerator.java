@@ -7,6 +7,7 @@ package MoveController;
 
 import DataModel.Move;
 import java.util.ArrayList;
+import wechesspresso.*;
 
 /**
  *
@@ -25,7 +26,7 @@ public class PathGenerator {
         //Si Promotion
         
         //Si capture, ranger la piece capturee en premier
-        if(move.get("type").equals("capture"))
+        if(WeChesspresso.isMoveCapturing(fen, move.get("pos1"), move.get("pos2")))
         {
             //1er Path : ranger la piece capturée avec Dijkstra
             Position depart = new Position(move.get("pos2"));
@@ -36,9 +37,12 @@ public class PathGenerator {
             
             Position pos_rangement = new Position(0.5,0.5);
             Path capt_path = Dijkstra.getShortestPath(depart,pos_rangement, fen);
+            System.out.println("[PathGenerator] Captured piece "+move.get("pos2")+" -> 0.5 0.5 - "+capt_path);
+            capt_path.streamline();
+            System.out.println("    Streamlined : "+capt_path);
             list.add(capt_path);
         }
-        
+        /*
         //Deplacer la piece qui effectue le deplacement/capture
         if(!move.get("piece").equals("cavalier"))
         {
@@ -55,6 +59,15 @@ public class PathGenerator {
             Path knight_path = Dijkstra.getShortestPath(depart,fin, fen);
             list.add(knight_path);
         }
+                */
+        Position depart = new Position(move.get("pos1"));
+            Position fin = new Position(move.get("pos2"));
+            Path knight_path = Dijkstra.getShortestPath(depart,fin, fen);
+            //System.out.println(knight_path.toString());
+            System.out.println("[PathGenerator] Moving piece "+move.get("pos1")+" -> "+move.get("pos2")+" - "+knight_path);
+            knight_path.streamline();
+            System.out.println("    Streamlined : "+knight_path);
+            list.add(knight_path);
         
         return list;
     }
