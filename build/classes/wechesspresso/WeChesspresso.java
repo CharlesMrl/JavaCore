@@ -99,9 +99,11 @@ public class WeChesspresso {
         Position pos=new Position(fen);
         short[] allMoves;
         allMoves=pos.getAllMoves();
+        
         String move;
         for(int i=0;i<allMoves.length;i++){
             move=Move.getString(allMoves[i]);
+            System.out.println(move);
             if(pos1.equals(move.substring(0,2)) && pos2.equals(move.substring(move.length()-2,move.length()))){
                 if(Move.isCapturing(allMoves[i])){
                     return true;

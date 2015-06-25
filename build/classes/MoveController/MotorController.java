@@ -84,7 +84,7 @@ public class MotorController {
         
         List<Path> lpath = new ArrayList<>();
         
-        Path p = Dijkstra.getShortestPath(new Position("e1"), new Position("e4"), Game.START_FEN);
+        Path p = Dijkstra.getShortestPath(new Position("b1"), new Position("e4"), Game.START_FEN);
         lpath.add(p);
         //System.out.println(p.positions.toString());
         /*

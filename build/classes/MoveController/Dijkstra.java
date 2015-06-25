@@ -120,37 +120,6 @@ public class Dijkstra{
 		return vertexArray;
 	}
 
-
-	// Cree un quadrillage de Vertex reliés entre eux
-	private static Vertex[][] makeVertexMap(int size, double shift, List<Integer> occupied){
-
-		Vertex[][] vertexArray = new Vertex[size][size];
-		Vertex v;
-		String key;
-
-		for(int i=0 ; i<size ; i++){
-			for(int j=0 ; j<size ; j++){
-				vertexArray[i][j]=new Vertex(i+shift,j+shift);
-			}
-		}
-
-		for(int i=0 ; i<size ; i++){
-			for(int j=0 ; j<size ; j++){
-				vertexArray[i][j].adjacencies = new ArrayList<Edge>();
-
-				if(i+1<size && !occupied.contains((i+1)*size+j))
-					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i+1][j], 1, i+1, j));
-				if(i>0 && !occupied.contains((i-1)*size+j))
-					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i-1][j], 1, i-1, j));
-				if(j+1<size && !occupied.contains(i*size+j+1))
-					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j+1], 1, i, j+1));
-				if(j>0 && !occupied.contains(i*size+j-1))
-					vertexArray[i][j].adjacencies.add(new Edge(vertexArray[i][j-1], 1, i, j-1));
-			}
-		}
-		return vertexArray;
-	}
-
 	// Relie 2 quadrillages de Vertex (1 quadrillage pour les arretes, 1 quadrillages pour les faces)
 	private static void linkVertexMaps(Vertex[][] v1, Vertex[][] v2, int size1){
 
@@ -190,13 +159,15 @@ public class Dijkstra{
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		return new Path(lpos);
+		Path p = new Path(lpos);
+                
+                return p;
 	}
 
 
-	private static List<Position> getShortestPath(int a, int b, List<Integer> occupied){
+	public static List<Position> getShortestPath(int a, int b, List<Integer> occupied){
 
-		Vertex[][] center = makeVertexMap(12,0.5,occupied);
+		Vertex[][] center = makeVertexMap(12,0.5);
 		Vertex v_start =center[a%12][a/12];
 		Vertex v_end = center[b%12][b/12];
 		Vertex[][] corner = makeVertexMap(13,0);
@@ -214,6 +185,7 @@ public class Dijkstra{
 		computePaths(v_start); // run Dijkstra
 		List<Vertex> vpath = getShortestPathTo(v_end);
                 List<Position> path = vertex_to_position(vpath) ;
+                //System.out.println(path.toString());
                 //path = correctPath(path);
 		return path;
 	}
