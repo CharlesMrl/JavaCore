@@ -63,14 +63,25 @@ public class Game extends DataModel{
     
     public boolean myTurn(Object my_id)
     {
+        System.out.println("1");
+        this.print();
         this.sync();
-        
+        System.out.println("2");
+        this.print();
         ArrayList<DataModel> liste_move = ConnectionManager.find(Move.class, "gid", this.get("id"));
-            if(liste_move.isEmpty())
-                if(this.get("uidw").equals(my_id))
-                    return true;
+        if(liste_move.isEmpty()){
+            if(this.get("uidw").equals(my_id)){
+                System.out.println("No moves yet and you're white");
+                return true;
+            }
+        }
         
+        System.out.println("3");
+        this.print();
         Move m = Move.getLastFromGame(this);
+        
+        m.print();
+        this.print();
         if(m.get("uid").equals(my_id.toString())){
             return false;
         }
