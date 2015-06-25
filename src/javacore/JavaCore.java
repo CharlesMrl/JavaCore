@@ -104,6 +104,8 @@ public class JavaCore {
         }*/
         //Si mon tour de jouer
         
+        current_game.sync();
+        Thread.sleep(5000);
         if (current_game.myTurn(user.get("id"))) {
             //if (true) {
             printFEN(current_game.get("fen"));
