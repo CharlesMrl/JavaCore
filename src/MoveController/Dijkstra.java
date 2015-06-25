@@ -178,7 +178,12 @@ public class Dijkstra{
 				// Ne pas relier au maillage les cases occupées
 				if(occupied.contains(i*12+j)){
 					//System.out.println("Case "+i+"-"+j+"occupee");
-					center[i][j].occupied=true;
+					if(i==b%12 && j==b/12){
+                                            
+                                        }
+                                        else{
+                                            center[i][j].occupied=true;
+                                        }
                                 }
                         }
                 }
@@ -471,7 +476,7 @@ public class Dijkstra{
 
 		String fen = "rnbqkbnr/pppp2pp/8/4pp2/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
 		ArrayList<ArrayList<Character>> teb = getFullBoard(fen);
-		//printBoard(teb);
+		printBoard(teb);
 		cases_prises = getOccupied(fen);
                 
 		List<Position> path = getShortestPath(start, end, cases_prises);

@@ -39,27 +39,27 @@ public class PathGenerator {
                 /*
                 TODO : Determiner la Position ou on range la piece capturée
                 */
-                /*
+                
                 Position pos_rangement = new Position(0.5,0.5);
                 Path capt_path = Dijkstra.getShortestPath(depart,pos_rangement, fen);
                 System.out.print("[PathGenerator] Captured piece "+move.get("pos2")+" -> 0.5 0.5 - "+capt_path);
                 capt_path.streamline();
                 System.out.println("    Streamlined : "+capt_path);
                 list.add(capt_path);
-                */
+                
                 
                 //BASTIEN : solution bug capture
-                Position pos_depart = new Position(move.get("pos2"));
-                Position pos_rangement = new Position(0.5,0.5);
-                List<Integer> occupied = Dijkstra.getOccupied(fen);
+                //Position pos_depart = new Position(move.get("pos2"));
+                //Position pos_rangement = new Position(0.5,0.5);
+                //List<Integer> occupied = Dijkstra.getOccupied(fen);
                 
                 ///// SOLUTION //////
                 //occupied.remove(######);
                 /////////////////////
                 
-                List<Position> pos_list = Dijkstra.getShortestPath(pos_depart.toInteger(), pos_rangement.toInteger(), occupied);
-                ArrayList<ArrayList<Character>> fen_tab = Dijkstra.getTabFromFen(fen);
-                Position capture_pos = new Position(move.get("pos2"));
+                //List<Position> pos_list = Dijkstra.getShortestPath(depart.toInteger(), pos_rangement.toInteger(), occupied);
+                //ArrayList<ArrayList<Character>> fen_tab = Dijkstra.getTabFromFen(fen);
+                //Position capture_pos = new Position(move.get("pos2"));
                 
                 //fen_tab.get(capture_pos.toInteger()%12).
             } catch (Exception ex) {
