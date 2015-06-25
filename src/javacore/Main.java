@@ -35,7 +35,7 @@ public class Main {
         choice_game_id = input.nextLine();
         */
         
-        choice_user_id = "4";
+        choice_user_id = "1";
         choice_game_id="1";
         try {
             //Debut
