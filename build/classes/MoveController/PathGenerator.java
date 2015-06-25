@@ -29,7 +29,8 @@ public class PathGenerator {
         //Si Promotion
         
         //Si capture, ranger la piece capturee en premier
-        if(WeChesspresso.isMoveCapturing(fen, move.get("pos1"), move.get("pos2")))
+        //if(WeChesspresso.isMoveCapturing(fen, move.get("pos1"), move.get("pos2")))
+        if(move.get("type").equals("capt"))
         {
             
             try {

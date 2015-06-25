@@ -61,10 +61,10 @@ public class JavaCore {
     
     public JavaCore(int user_id, int game_id) throws SQLException, ClassNotFoundException {
         //login db ECE
-        this.con = ConnectionManager.getConnection();
+        //this.con = ConnectionManager.getConnection();
 
         //login db 192.168.80.17
-        //this.con = ConnectionManager.getConnectionLocal();
+        this.con = ConnectionManager.getConnectionLocal();
         
         this.user = null;
         this.current_game = null;
