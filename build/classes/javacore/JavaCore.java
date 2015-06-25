@@ -205,6 +205,7 @@ public class JavaCore {
                 System.out.println("You lost!...loser");
             }
         }
+        Thread.sleep(5000);
     }
     
 }
