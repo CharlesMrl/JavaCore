@@ -63,10 +63,10 @@ public class Game extends DataModel{
     
     public boolean myTurn(Object my_id)
     {
-        System.out.println("1");
+        System.out.print("1");
         this.print();
         this.sync();
-        System.out.println("2");
+        System.out.print("2");
         this.print();
         ArrayList<DataModel> liste_move = ConnectionManager.find(Move.class, "gid", this.get("id"));
         if(liste_move.isEmpty()){
@@ -76,10 +76,10 @@ public class Game extends DataModel{
             }
         }
         
-        System.out.println("3");
+        System.out.print("[ move sync ]");
         this.print();
         Move m = Move.getLastFromGame(this);
-        
+        System.out.print("3");
         m.print();
         this.print();
         if(m.get("uid").equals(my_id.toString())){
