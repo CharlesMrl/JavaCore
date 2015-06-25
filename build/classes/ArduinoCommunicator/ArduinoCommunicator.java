@@ -6,178 +6,157 @@
 package ArduinoCommunicator;
 
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.util.Enumeration;
+import java.io.OutputStreamWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- *
- * @author Bast
- */
+public class ArduinoCommunicator {
 
-public class ArduinoCommunicator implements SerialPortEventListener {
-    SerialPort serialPort = null;
+	private static Process pythonProcessReader;
+	private static Process pythonProcessWriter;
+	private static BufferedReader inp;
+	private static BufferedWriter outp;
+	private static final String cmdWriter = "/home/pi/Desktop/wechess/JavaCore/python/writer.py";
+	private static final String cmdReader = "/home/pi/Desktop/wechess/JavaCore/python/reader.py";
+	private static String readLine;
+	private static String linetoWrite = null;
+	private static ProcessBuilder pyPRBuilder;
+	private static ProcessBuilder pyPWBuilder;
 
-    private static final String PORT_NAMES[] = { 
-        "/dev/tty.usbmodem1411", // Mac OS X
-    //        "/dev/usbdev", // Linux
-    //        "/dev/tty", // Linux
-    //        "/dev/serial", // Linux
-    //        "COM3", // Windows
-    };
-    
-    private String appName;
-    private BufferedReader input;
-    private OutputStream output;
-    
-    private static final int TIME_OUT = 1000; // Port open timeout
-    private static final int DATA_RATE = 9600; // Arduino serial port
-    
-    public ArduinoCommunicator() {
-        appName = getClass().getName();
-    }
-    
-    public void validate(){
-        send("VALID");
-    }
-    
-    public void reject(){
-        send("INVALID");
-    }
-    
-    public void sleep(){
-        send("SLEEP");
-    }
-    
-    public String read(){
-        send("READ");
-        String msg = new String();
-        
-        return msg;
-    }
-    
-    public boolean initialize() {
-        try {
-            CommPortIdentifier portId = null;
-            Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
+	public ArduinoCommunicator() throws IOException {
+		ArduinoCommunicator.pyPRBuilder = new ProcessBuilder(cmdReader);
+		ArduinoCommunicator.pyPWBuilder = new ProcessBuilder(cmdWriter);
+		ArduinoCommunicator.readLine = null;
+		ArduinoCommunicator.linetoWrite = null;
+		ArduinoCommunicator.runPythonReader();
+		//ArduinoCommunicator.runPythonWriter();
+	}
 
-            // Enumerate system ports and try connecting to Arduino over each
-            //
-            System.out.println( "Trying:");
-            while (portId == null && portEnum.hasMoreElements()) {
-                // Iterate through your host computer's serial port IDs
-                //
-                CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
-                System.out.println( "   port" + currPortId.getName() );
-                for (String portName : PORT_NAMES) {
-                    if ( currPortId.getName().equals(portName) 
-                      || currPortId.getName().startsWith(portName)) {
+	public static void runPythonWriter() throws IOException {
+		ArduinoCommunicator.pythonProcessWriter = ArduinoCommunicator.pyPWBuilder.start();
+		ArduinoCommunicator.outp = new BufferedWriter(new OutputStreamWriter(ArduinoCommunicator.pythonProcessWriter.getOutputStream()));
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				//while (true) {
+					try {
+							System.out.print("pythonWriter sends :"+ArduinoCommunicator.linetoWrite);
+							ArduinoCommunicator.outp.write(ArduinoCommunicator.linetoWrite);
+                                                        ArduinoCommunicator.outp.newLine();
+							ArduinoCommunicator.outp.flush();
+							System.out.println(" -> OK");
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+						try {
+							Thread.sleep(500);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						//ArduinoCommunicator.linetoWrite=null;
+					
 
-                        // Try to connect to the Arduino on this port
-                        //
-                        // Open serial port
-                        serialPort = (SerialPort)currPortId.open(appName, TIME_OUT);
-                        portId = currPortId;
-                        System.out.println( "Connected on port" + currPortId.getName() );
-                        break;
-                    }
-                }
+				}
+			//}
+		});
+		t.start();
+	}
+
+	public static void runPythonReader() throws IOException {
+		ArduinoCommunicator.pythonProcessReader = ArduinoCommunicator.pyPRBuilder.start();
+		ArduinoCommunicator.inp = new BufferedReader(new InputStreamReader(ArduinoCommunicator.pythonProcessReader.getInputStream()));
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				try {
+					while (true){
+                                            //System.out.println("Reading ...");
+                                                ArduinoCommunicator.readLine = ArduinoCommunicator.inp.readLine();
+                                                
+                                                //if(readLine==null) continue;
+                                                System.out.println("pythonReader received :"+ArduinoCommunicator.readLine);
+						//System.out.println(readLine);
+						// CALL FUNCTION THAT NEDD TO PROCESS READ DATA HERE INSTEAD
+						//SerialPython.setReadLine("nope");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				System.out.println("Reader is dead");
+			}
+		});
+		t.start();
+	}
+
+	public static void send(String m) {
+		ArduinoCommunicator.linetoWrite = m;
+            try {
+                ArduinoCommunicator.runPythonWriter();
+                try {
+			Thread.sleep(2000);
+		} catch (InterruptedException ex) {
+			ex.printStackTrace();
+		}
+            } catch (IOException ex) {
+                Logger.getLogger(ArduinoCommunicator.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
-            if (portId == null || serialPort == null) {
-                System.out.println("Oops... Could not connect to Arduino");
-                return false;
-            }
-        
-            // set port parameters
-            serialPort.setSerialPortParams(DATA_RATE,
-                            SerialPort.DATABITS_8,
-                            SerialPort.STOPBITS_1,
-                            SerialPort.PARITY_NONE);
+	}
 
-            // add event listeners
-            serialPort.addEventListener(this);
-            serialPort.notifyOnDataAvailable(true);
+	public static String read() {
+		String tmp = ArduinoCommunicator.readLine;
+		ArduinoCommunicator.readLine = null;
+		return tmp;
+	}
 
-            // Give the Arduino some time
-            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-            
-            return true;
-        }
-        catch ( Exception e ) { 
-            e.printStackTrace();
-        }
-        return false;
-    }
-    
-    private void send(String data) {
-        try {
-            System.out.println("Sending data: '" + data +"'");
-            
-            // open the streams and send the "y" character
-            output = serialPort.getOutputStream();
-            output.write( data.getBytes() );
-        } 
-        catch (Exception e) {
-            System.err.println(e.toString());
-            System.exit(0);
-        }
-    }
+	public static void valid() {
+		send("valid");
+	}
 
-    //
-    // This should be called when you stop using the port
-    //
-    public synchronized void close() {
-        if ( serialPort != null ) {
-            serialPort.removeEventListener();
-            serialPort.close();
-        }
-    }
+	public static void invalid() {
+		send("invalid");
+	}
 
-    //
-    // Handle serial port event
-    //
-    @Override
-    public synchronized void serialEvent(SerialPortEvent oEvent) {
-        System.out.println("Event received: " + oEvent.toString());
-        try {
-            switch (oEvent.getEventType() ) {
-                case SerialPortEvent.DATA_AVAILABLE: 
-                    if ( input == null ) {
-                        input = new BufferedReader(
-                            new InputStreamReader(
-                                    serialPort.getInputStream()));
-                    }
-                    String inputLine = input.readLine();
-                    
-                    System.out.println(inputLine);
-                    break;
+	public static void sleep() {
+		send("sleep");
+	}
 
-                default:
-                    break;
-            }
-        } 
-        catch (Exception e) {
-            System.err.println(e.toString());
-        }
-    }
-    
-    public static void main(String[] args){
-        ArduinoCommunicator test = new ArduinoCommunicator();
-        if ( test.initialize() ) {
-            test.send("y");
-            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-            test.send("n");
-            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-            test.close();
-        }
+	public static void listen(String player) {
+		switch (player) {
+		case "white":
+			send("listen 1");
+			break;
+		case "black":
+			send("listen 2");
+			break;
+		}
+	}
 
-        // Wait 5 seconds then shutdown
-        try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-    }
+	public static void init() {
+		send("init");
+		
+	}
+
+	public static void main(String[] args) throws IOException {
+		SerialPython sp = new SerialPython();
+		while(true){
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException ie) {
+
+			}
+
+			sp.listen("white");
+			String out;
+			do{
+				out = sp.read();
+			}while(out==null);
+
+
+			System.out.println("Received: "+out);
+			sp.valid();
+		}
+	}
+
 }

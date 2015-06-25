@@ -268,10 +268,11 @@ public class WeChesspresso {
         String pos1 = move.substring(0,2);
         String pos2 = move.substring(move.length()-2,move.length());
         if(isMoveValid(fen,pos1,pos2)){
+            
             pos.doMove(getShortMoveFromPos(fen,pos1,pos2));
             return pos.getFEN();
         }
-        return "no";
+        else throw new IllegalMoveException(move);
     }
     
     static void printFEN(String fen){

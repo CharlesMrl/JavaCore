@@ -165,7 +165,7 @@ public class Dijkstra{
 	}
 
 
-	private static List<Position> getShortestPath(int a, int b, List<Integer> occupied){
+	public static List<Position> getShortestPath(int a, int b, List<Integer> occupied){
 
 		Vertex[][] center = makeVertexMap(12,0.5);
 		Vertex v_start =center[a%12][a/12];

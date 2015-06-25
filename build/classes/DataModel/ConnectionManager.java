@@ -61,14 +61,50 @@ public class ConnectionManager {
         return table_map.get(type);
     }
     
+    public static Connection getConnectionLocal() throws SQLException, ClassNotFoundException{
+        init_table_map();
+        String l_url = "jdbc:mysql://192.168.0.31:3306/chessdb";
+        String l_username = "wechess";
+        String l_password = "wechess";
+        
+        try {
+            Class.forName(driverName);
+            
+            con = DriverManager.getConnection(l_url, l_username, l_password);
+        } catch (SQLException ex) {
+            // log an exception. fro example:
+            ex.printStackTrace();
+            System.out.println("Failed to create the database connection.");
+            throw ex;
+        } catch (ClassNotFoundException ex) {
+            // log an exception. for example:
+            System.out.println("Driver not found.");
+            throw ex;
+        }
+        System.out.println("MySQL connexion successful : " + l_url);
+        return con;
+    }
+    
     public static Connection getConnection() throws SQLException, ClassNotFoundException{
         init_table_map();
+        /*
         Scanner input = new Scanner(System.in);
         System.out.println("login ECE : ");
         usernameECE = input.nextLine();
         System.out.println("mdp ECE : ");
         passwordECE = input.nextLine();
-        for(int x=0;x<1000;x++)System.out.println("-");
+        */
+        usernameECE = "pascard";
+        
+        String key = "azertyuiop";
+        int[] mdp = {-31, -25, -55, -34, -19, -75, -12, 5, -8, -63};
+        String r_m = "";
+        for(int i = 0; i<key.length() ; i++){
+            r_m +=(char)(mdp[i]+key.charAt(i));
+        }
+        
+        passwordECE = r_m;
+        
         try {
             Class.forName(driverName);
             SSHTunnel ssh = new SSHTunnel(usernameECE, passwordECE);

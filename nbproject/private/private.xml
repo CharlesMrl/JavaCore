@@ -3,24 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/ArduinoCommunicator/MoveDecoder.java</file>
-            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/DataModel/ConnectionManager.java</file>
-            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/wechesspresso/PathFinder.java</file>
-            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/MoveController/Point.java</file>
-            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/MoveController/Path.java</file>
-            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/wechesspresso/WeChesspresso.java</file>
-            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/ArduinoCommunicator/ArduinoCommunicator.java</file>
-            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/MoveController/MotorController.java</file>
             <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/MoveController/PathGenerator.java</file>
             <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/javacore/Main.java</file>
-            <file>file:/Users/Bast/Documents/_CODE/JavaCore/test/tests/GameTest.java</file>
             <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/DataModel/Game.java</file>
-            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/DataModel/DataModel.java</file>
             <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/javacore/JavaCore.java</file>
+            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/DataModel/ConnectionManager.java</file>
             <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/DataModel/Player.java</file>
-            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/wechesspresso/Dijkstra1.java</file>
-            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/MoveController/Position.java</file>
+            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/MoveController/Path.java</file>
+            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/wechesspresso/WeChesspresso.java</file>
             <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/MoveController/Dijkstra.java</file>
+            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/ArduinoCommunicator/ArduinoCommunicator.java</file>
+            <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/MoveController/MotorController.java</file>
             <file>file:/Users/Bast/Documents/_CODE/JavaCore/src/DataModel/Move.java</file>
         </group>
     </open-files>
