@@ -169,7 +169,6 @@ public class JavaCore {
                 current_game.set("winner", user.get("id"));
             }
             System.out.println("[OK] Move sent");
-            Thread.sleep(3000);
         } //Si tour de l'adversaire
         else {
             //Attendre un nouveau coup

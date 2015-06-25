@@ -269,6 +269,9 @@ public class WeChesspresso {
         Position pos=new Position(fen);
         String pos1 = move.substring(0,2);
         String pos2 = move.substring(move.length()-2,move.length());
+        System.out.println("[GETNEWFEN ] fen : "+fen);
+        System.out.println("[GETNEWFEN ] pos1 : "+pos1);
+        System.out.println("[GETNEWFEN ] pos2 : "+pos2);
         if(isMoveValid(fen,pos1,pos2)){
             
             pos.doMove(getShortMoveFromPos(fen,pos1,pos2));
