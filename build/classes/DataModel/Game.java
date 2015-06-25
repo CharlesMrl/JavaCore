@@ -40,6 +40,7 @@ public class Game extends DataModel{
     
     public boolean isOver()
     {
+        this.sync();
         if(!this.containsField("winner") || this.get("winner")==null) return false;
         return true;
     }
@@ -85,6 +86,7 @@ public class Game extends DataModel{
     //LOUIS : retourne vrai si il y a echec
     public boolean isCheck()
     {
+        this.sync();
         return WeChesspresso.isCheck(this.get("fen"));
     }
     

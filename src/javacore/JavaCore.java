@@ -103,6 +103,7 @@ public class JavaCore {
             System.exit(-1);
         }*/
         //Si mon tour de jouer
+        
         if (current_game.myTurn(user.get("id"))) {
             //if (true) {
             printFEN(current_game.get("fen"));
@@ -167,6 +168,8 @@ public class JavaCore {
                 System.out.println("You won!");
                 current_game.set("winner", user.get("id"));
             }
+            System.out.println("[OK] Move sent");
+            Thread.sleep(3000);
         } //Si tour de l'adversaire
         else {
             //Attendre un nouveau coup
