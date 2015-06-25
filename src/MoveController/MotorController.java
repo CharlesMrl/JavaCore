@@ -22,7 +22,8 @@ import java.util.logging.Logger;
  */
 public class MotorController {
     
-    private static final String motor_controller_bin = "/Users/Bast/Documents/_CODE/motorstepper/dummy_move";
+    //private static final String motor_controller_bin = "/Users/Bast/Documents/_CODE/motorstepper/dummy_move";
+    private static final String motor_controller_bin = "/home/pi/Desktop/wechess/weChess_Stepper";
     
     static public void run(List<Path> path_list){
         String cmd = new String();
