@@ -69,7 +69,6 @@ create table user_stats(
 
 insert into users VALUES (NULL,'Pascard','Bastien','France','Nogent-Sur-Marne');
 insert into users VALUES (NULL,'Denefle','Lucas','France','Boulbi');
-insert into users VALUES (NULL,'Syoen','Louis','France','Paris');
 insert into users VALUES (NULL,'Mariller','Charles','France','Colombes');
 insert into users VALUES (NULL,'Sanchiz','Loic','France','Paris');
 
